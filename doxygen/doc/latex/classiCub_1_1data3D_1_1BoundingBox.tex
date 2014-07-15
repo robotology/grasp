@@ -1,0 +1,552 @@
+\section{i\+Cub\+:\+:data3D\+:\+:Bounding\+Box Class Reference}
+\label{classiCub_1_1data3D_1_1BoundingBox}\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+
+
+The Definition of the \hyperlink{classiCub_1_1data3D_1_1BoundingBox}{Bounding\+Box} class.  
+
+
+
+
+{\ttfamily \#include $<$bounding\+Box.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\label{classiCub_1_1data3D_1_1BoundingBox_aed6d593bf4359e014acb416663e66903} 
+\hyperlink{classiCub_1_1data3D_1_1BoundingBox_aed6d593bf4359e014acb416663e66903}{Bounding\+Box} ()
+\begin{DoxyCompactList}\small\item\em Default Constructor. \end{DoxyCompactList}\item 
+\hyperlink{classiCub_1_1data3D_1_1BoundingBox_a5c2f97ac3178b7b04610428d4cf14a3d}{Bounding\+Box} (const i\+Cub\+::data3\+D\+::\+Box3D \&bounding\+Box)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+i\+Cub\+::data3\+D\+::\+Box3D \hyperlink{classiCub_1_1data3D_1_1BoundingBox_a4930ffe6b57fc6823adb80b2f4143619}{get\+Bounding\+Box} ()
+\begin{DoxyCompactList}\small\item\em Return the Box3D structure underline the bounding box. \end{DoxyCompactList}\item 
+void \hyperlink{classiCub_1_1data3D_1_1BoundingBox_ab9c2a8dfb61a2c0c02529968df5a2e2e}{set\+Bounding\+Box} (const i\+Cub\+::data3\+D\+::\+Box3D \&bounding\+Box)
+\begin{DoxyCompactList}\small\item\em Set a Box3D inside the \hyperlink{classiCub_1_1data3D_1_1BoundingBox}{Bounding\+Box} wrapper. \end{DoxyCompactList}\item 
+std\+::vector$<$ i\+Cub\+::data3\+D\+::\+Point\+X\+YZ $>$ \hyperlink{classiCub_1_1data3D_1_1BoundingBox_a08949c30ec7ee296981c11ad5ff4714e}{get\+Corners} ()
+\begin{DoxyCompactList}\small\item\em Return the corners of the Box3D structure. \end{DoxyCompactList}\item 
+void \hyperlink{classiCub_1_1data3D_1_1BoundingBox_a0cf2386f7eb05f18a69ccca09c589c17}{set\+Corners} (const std\+::vector$<$ i\+Cub\+::data3\+D\+::\+Point\+X\+YZ $>$ \&corners)
+\begin{DoxyCompactList}\small\item\em Set the corners of the bounding box. \end{DoxyCompactList}\item 
+yarp\+::sig\+::\+Matrix \hyperlink{classiCub_1_1data3D_1_1BoundingBox_a2f5c9ef6a7d295e0ae60d1bf51c236b6}{get\+Orientation} ()
+\begin{DoxyCompactList}\small\item\em Return the orientation of the Box3D structure. \end{DoxyCompactList}\item 
+void \hyperlink{classiCub_1_1data3D_1_1BoundingBox_a9d2cc0a0613750a48567f118d3b3a0eb}{set\+Orientation} (const yarp\+::sig\+::\+Matrix \&orientation)
+\begin{DoxyCompactList}\small\item\em Modify the orientation of the bounding box. \end{DoxyCompactList}\item 
+yarp\+::sig\+::\+Vector \hyperlink{classiCub_1_1data3D_1_1BoundingBox_a96d06a9d784ac627078353814207ad68}{get\+Dim} ()
+\begin{DoxyCompactList}\small\item\em Return the dimension of the principal axes, in the same order of the get\+Axis method. \end{DoxyCompactList}\item 
+void \hyperlink{classiCub_1_1data3D_1_1BoundingBox_a768e10207aef845d49e9788809b5f69f}{get\+Axis} (yarp\+::sig\+::\+Vector \&x, yarp\+::sig\+::\+Vector \&y, yarp\+::sig\+::\+Vector \&z)
+\begin{DoxyCompactList}\small\item\em Provide the principal axes of the bounding box. \end{DoxyCompactList}\item 
+yarp\+::sig\+::\+Vector \hyperlink{classiCub_1_1data3D_1_1BoundingBox_af16a8f9810623cfa43b0efcee20ebc44}{get\+Center} ()
+\begin{DoxyCompactList}\small\item\em Return the center of the bounding box. \end{DoxyCompactList}\item 
+void \hyperlink{classiCub_1_1data3D_1_1BoundingBox_a45bbf770b8c816f6c7d47ba747beaaaf}{draw\+Bounding\+Box} (boost\+::shared\+\_\+ptr$<$ pcl\+::visualization\+::\+P\+C\+L\+Visualizer $>$ viewer, int viewport=0)
+\begin{DoxyCompactList}\small\item\em Draw a 3D box in a P\+C\+L\+Visualizer window. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The Definition of the \hyperlink{classiCub_1_1data3D_1_1BoundingBox}{Bounding\+Box} class. 
+
+Definition at line 61 of file bounding\+Box.\+h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\label{classiCub_1_1data3D_1_1BoundingBox_a5c2f97ac3178b7b04610428d4cf14a3d} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!Bounding\+Box@{Bounding\+Box}}
+\index{Bounding\+Box@{Bounding\+Box}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{Bounding\+Box()}{BoundingBox()}}
+{\footnotesize\ttfamily Bounding\+Box\+::\+Bounding\+Box (\begin{DoxyParamCaption}\item[{const i\+Cub\+::data3\+D\+::\+Box3D \&}]{bounding\+Box }\end{DoxyParamCaption})}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bounding\+Box} & a Box3D object can be set directly in the constructor. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 27 of file bounding\+Box.\+cpp.
+
+
+\begin{DoxyCode}
+28 \{
+29     this->boundingBox.corners=boundingBox.corners;
+30     this->boundingBox.orientation=boundingBox.orientation;
+31 \}
+\end{DoxyCode}
+
+
+\subsection{Member Function Documentation}
+\label{classiCub_1_1data3D_1_1BoundingBox_a45bbf770b8c816f6c7d47ba747beaaaf} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!draw\+Bounding\+Box@{draw\+Bounding\+Box}}
+\index{draw\+Bounding\+Box@{draw\+Bounding\+Box}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{draw\+Bounding\+Box()}{drawBoundingBox()}}
+{\footnotesize\ttfamily void Bounding\+Box\+::draw\+Bounding\+Box (\begin{DoxyParamCaption}\item[{boost\+::shared\+\_\+ptr$<$ pcl\+::visualization\+::\+P\+C\+L\+Visualizer $>$}]{viewer,  }\item[{int}]{viewport = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Draw a 3D box in a P\+C\+L\+Visualizer window. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em viewer} & the P\+C\+L\+Visualizer window where the 3D box has to be drawn. \\
+\hline
+{\em viewport} & the viewport inside the P\+C\+L\+Visualizer where the 3D box has to be drawn. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 176 of file bounding\+Box.\+cpp.
+
+
+
+Referenced by Bounding\+Box().
+
+
+\begin{DoxyCode}
+177 \{
+178     pcl::PointXYZRGB point1;
+179     point1.x=boundingBox.corners[0].x;
+180     point1.y=boundingBox.corners[0].y;
+181     point1.z=boundingBox.corners[0].z;
+182     point1.r=255;
+183     point1.g=0;
+184     point1.b=0;
+185     pcl::PointXYZRGB point2;
+186     point2.x=boundingBox.corners[1].x;
+187     point2.y=boundingBox.corners[1].y;
+188     point2.z=boundingBox.corners[1].z;
+189     point2.r=255;
+190     point2.g=0;
+191     point2.b=0;
+192     pcl::PointXYZRGB point3;
+193     point3.x=boundingBox.corners[2].x;
+194     point3.y=boundingBox.corners[2].y;
+195     point3.z=boundingBox.corners[2].z;
+196     point3.r=255;
+197     point3.g=0;
+198     point3.b=0;
+199     pcl::PointXYZRGB point4;
+200     point4.x=boundingBox.corners[3].x;
+201     point4.y=boundingBox.corners[3].y;
+202     point4.z=boundingBox.corners[3].z;
+203     point4.r=255;
+204     point4.g=0;
+205     point4.b=0;
+206     pcl::PointXYZRGB point5;
+207     point5.x=boundingBox.corners[4].x;
+208     point5.y=boundingBox.corners[4].y;
+209     point5.z=boundingBox.corners[4].z;
+210     point5.r=255;
+211     point5.g=0;
+212     point5.b=0;
+213     pcl::PointXYZRGB point6;
+214     point6.x=boundingBox.corners[5].x;
+215     point6.y=boundingBox.corners[5].y;
+216     point6.z=boundingBox.corners[5].z;
+217     point6.r=255;
+218     point6.g=0;
+219     point6.b=0;
+220     pcl::PointXYZRGB point7;
+221     point7.x=boundingBox.corners[6].x;
+222     point7.y=boundingBox.corners[6].y;
+223     point7.z=boundingBox.corners[6].z;
+224     point7.r=255;
+225     point7.g=0;
+226     point7.b=0;
+227     pcl::PointXYZRGB point8;
+228     point8.x=boundingBox.corners[7].x;
+229     point8.y=boundingBox.corners[7].y;
+230     point8.z=boundingBox.corners[7].z;
+231     point8.r=255;
+232     point8.g=0;
+233     point8.b=0;
+234 
+235     Vector centerroot=getCenter();
+236     Vector vectxroot,vectyroot,vectzroot;
+237     getAxis(vectxroot,vectyroot,vectzroot);
+238 
+239     pcl::PointXYZ z1;
+240     z1.x=centerroot[0]+(vectzroot[0]/2);
+241     z1.y=centerroot[1]+(vectzroot[1]/2);
+242     z1.z=centerroot[2]+(vectzroot[2]/2);
+243 
+244     pcl::PointXYZ z2;
+245     z2.x=centerroot[0]+(-vectzroot[0]/2);
+246     z2.y=centerroot[1]+(-vectzroot[1]/2);
+247     z2.z=centerroot[2]+(-vectzroot[2]/2);
+248 
+249     pcl::PointXYZ y1;
+250     y1.x=centerroot[0]+(vectyroot[0]/2);
+251     y1.y=centerroot[1]+(vectyroot[1]/2);
+252     y1.z=centerroot[2]+(vectyroot[2]/2);
+253 
+254     pcl::PointXYZ y2;
+255     y2.x=centerroot[0]+(-vectyroot[0]/2);
+256     y2.y=centerroot[1]+(-vectyroot[1]/2);
+257     y2.z=centerroot[2]+(-vectyroot[2]/2);
+258     
+259     pcl::PointXYZ x1;
+260     x1.x=centerroot[0]+(vectxroot[0]/2);
+261     x1.y=centerroot[1]+(vectxroot[1]/2);
+262     x1.z=centerroot[2]+(vectxroot[2]/2);
+263 
+264     pcl::PointXYZ x2;
+265     x2.x=centerroot[0]+(-vectxroot[0]/2);
+266     x2.y=centerroot[1]+(-vectxroot[1]/2);
+267     x2.z=centerroot[2]+(-vectxroot[2]/2);
+268 
+269     pcl::PointXYZ center(centerroot[0],centerroot[1],centerroot[2]);
+270 
+271     \textcolor{keywordflow}{if} (viewport==0)
+272     \{
+273         viewer->addLine<pcl::PointXYZRGB>(point1,point2,\textcolor{stringliteral}{"line1"});
+274         viewer->addLine<pcl::PointXYZRGB>(point2,point3,\textcolor{stringliteral}{"line2"});
+275         viewer->addLine<pcl::PointXYZRGB>(point3,point4,\textcolor{stringliteral}{"line3"});
+276         viewer->addLine<pcl::PointXYZRGB>(point4,point1,\textcolor{stringliteral}{"line4"});
+277         viewer->addLine<pcl::PointXYZRGB>(point5,point6,\textcolor{stringliteral}{"line5"});
+278         viewer->addLine<pcl::PointXYZRGB>(point6,point7,\textcolor{stringliteral}{"line6"});
+279         viewer->addLine<pcl::PointXYZRGB>(point7,point8,\textcolor{stringliteral}{"line7"});
+280         viewer->addLine<pcl::PointXYZRGB>(point8,point5,\textcolor{stringliteral}{"line8"});
+281         viewer->addLine<pcl::PointXYZRGB>(point1,point5,\textcolor{stringliteral}{"line9"});
+282         viewer->addLine<pcl::PointXYZRGB>(point2,point6,\textcolor{stringliteral}{"line10"});
+283         viewer->addLine<pcl::PointXYZRGB>(point3,point7,\textcolor{stringliteral}{"line11"});
+284         viewer->addLine<pcl::PointXYZRGB>(point4,point8,\textcolor{stringliteral}{"line12"});
+285 
+286         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(z1,center,1,1,1,1,\textcolor{stringliteral}{"z1"});
+287         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(z2,center,1,1,1,1,\textcolor{stringliteral}{"z2"});
+288         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(y1,center,1,1,1,1,\textcolor{stringliteral}{"y1"});
+289         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(y2,center,1,1,1,1,\textcolor{stringliteral}{"y2"});
+290         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(x1,center,1,1,1,1,\textcolor{stringliteral}{"x1"});
+291         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(x2,center,1,1,1,1,\textcolor{stringliteral}{"x2"});
+292     \}
+293     \textcolor{keywordflow}{else}
+294     \{
+295         viewer->addLine<pcl::PointXYZRGB>(point1,point2,\textcolor{stringliteral}{"line1"},viewport);
+296         viewer->addLine<pcl::PointXYZRGB>(point2,point3,\textcolor{stringliteral}{"line2"},viewport);
+297         viewer->addLine<pcl::PointXYZRGB>(point3,point4,\textcolor{stringliteral}{"line3"},viewport);
+298         viewer->addLine<pcl::PointXYZRGB>(point4,point1,\textcolor{stringliteral}{"line4"},viewport);
+299         viewer->addLine<pcl::PointXYZRGB>(point5,point6,\textcolor{stringliteral}{"line5"},viewport);
+300         viewer->addLine<pcl::PointXYZRGB>(point6,point7,\textcolor{stringliteral}{"line6"},viewport);
+301         viewer->addLine<pcl::PointXYZRGB>(point7,point8,\textcolor{stringliteral}{"line7"},viewport);
+302         viewer->addLine<pcl::PointXYZRGB>(point8,point5,\textcolor{stringliteral}{"line8"},viewport);
+303         viewer->addLine<pcl::PointXYZRGB>(point1,point5,\textcolor{stringliteral}{"line9"},viewport);
+304         viewer->addLine<pcl::PointXYZRGB>(point2,point6,\textcolor{stringliteral}{"line10"},viewport);
+305         viewer->addLine<pcl::PointXYZRGB>(point3,point7,\textcolor{stringliteral}{"line11"},viewport);
+306         viewer->addLine<pcl::PointXYZRGB>(point4,point8,\textcolor{stringliteral}{"line12"},viewport);
+307         
+308         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(z1,center,0,0,1,1,\textcolor{stringliteral}{"z1"},viewport);
+309         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(z2,center,0,0,1,1,\textcolor{stringliteral}{"z2"},viewport);
+310         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(y1,center,0,1,0,1,\textcolor{stringliteral}{"y1"},viewport);
+311         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(y2,center,0,1,0,1,\textcolor{stringliteral}{"y2"},viewport);
+312         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(x1,center,1,0,0,1,\textcolor{stringliteral}{"x1"},viewport);
+313         viewer->addArrow<pcl::PointXYZ,pcl::PointXYZ>(x2,center,1,0,0,1,\textcolor{stringliteral}{"x2"},viewport);
+314     \}
+315 \}
+\end{DoxyCode}
+\label{classiCub_1_1data3D_1_1BoundingBox_a768e10207aef845d49e9788809b5f69f} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!get\+Axis@{get\+Axis}}
+\index{get\+Axis@{get\+Axis}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{get\+Axis()}{getAxis()}}
+{\footnotesize\ttfamily void Bounding\+Box\+::get\+Axis (\begin{DoxyParamCaption}\item[{yarp\+::sig\+::\+Vector \&}]{x,  }\item[{yarp\+::sig\+::\+Vector \&}]{y,  }\item[{yarp\+::sig\+::\+Vector \&}]{z }\end{DoxyParamCaption})}
+
+
+
+Provide the principal axes of the bounding box. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & first principal axis of the bounding box. \\
+\hline
+{\em y} & second principal axis of the bounding box. \\
+\hline
+{\em z} & third principal axis of the bounding box. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 119 of file bounding\+Box.\+cpp.
+
+
+
+Referenced by Bounding\+Box().
+
+
+\begin{DoxyCode}
+120 \{
+121     Matrix corner\_i=convertCorners();
+122     yarp::sig::Vector indexes=findIndexes(corner\_i);
+123 
+124     yarp::sig::Vector point1(3); point1[0]=corner\_i(0,0); point1[1]=corner\_i(0,1); point1[2]=corner\_i(0,2);
+125     
+126     yarp::sig::Vector index0(3); index0[0]=corner\_i(indexes[0],0); index0[1]=corner\_i(indexes[0],1); index0
+      [2]=corner\_i(indexes[0],2);
+127     yarp::sig::Vector index1(3); index1[0]=corner\_i(indexes[1],0); index1[1]=corner\_i(indexes[1],1); index1
+      [2]=corner\_i(indexes[1],2);
+128     yarp::sig::Vector index2(3); index2[0]=corner\_i(indexes[2],0); index2[1]=corner\_i(indexes[2],1); index2
+      [2]=corner\_i(indexes[2],2);
+129 
+130     yarp::sig::Vector vectz=point1-index0;
+131     z=vectz*boundingBox.orientation.transposed();
+132     yarp::sig::Vector vecty=point1-index1;
+133     y=vecty*boundingBox.orientation.transposed();
+134     yarp::sig::Vector vectx=point1-index2;
+135     x=vectx*boundingBox.orientation.transposed();
+136 \}
+\end{DoxyCode}
+\label{classiCub_1_1data3D_1_1BoundingBox_a4930ffe6b57fc6823adb80b2f4143619} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!get\+Bounding\+Box@{get\+Bounding\+Box}}
+\index{get\+Bounding\+Box@{get\+Bounding\+Box}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{get\+Bounding\+Box()}{getBoundingBox()}}
+{\footnotesize\ttfamily i\+Cub\+::data3\+D\+::\+Box3D Bounding\+Box\+::get\+Bounding\+Box (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Return the Box3D structure underline the bounding box. 
+
+\begin{DoxyReturn}{Returns}
+the Box3D. 
+\end{DoxyReturn}
+
+
+Definition at line 34 of file bounding\+Box.\+cpp.
+
+
+
+Referenced by Bounding\+Box().
+
+
+\begin{DoxyCode}
+35 \{
+36     \textcolor{keywordflow}{return} this->boundingBox;
+37 \}
+\end{DoxyCode}
+\label{classiCub_1_1data3D_1_1BoundingBox_af16a8f9810623cfa43b0efcee20ebc44} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!get\+Center@{get\+Center}}
+\index{get\+Center@{get\+Center}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{get\+Center()}{getCenter()}}
+{\footnotesize\ttfamily Vector Bounding\+Box\+::get\+Center (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Return the center of the bounding box. 
+
+\begin{DoxyReturn}{Returns}
+a vector representing the center of the bounding box. 
+\end{DoxyReturn}
+
+
+Definition at line 155 of file bounding\+Box.\+cpp.
+
+
+
+Referenced by Bounding\+Box().
+
+
+\begin{DoxyCode}
+156 \{
+157     Matrix corner\_i=convertCorners();
+158     yarp::sig::Vector indexes=findIndexes(corner\_i);
+159 
+160     yarp::sig::Vector point1(3); point1[0]=corner\_i(0,0); point1[1]=corner\_i(0,1); point1[2]=corner\_i(0,2);
+161     
+162     yarp::sig::Vector index0(3); index0[0]=corner\_i(indexes[0],0); index0[1]=corner\_i(indexes[0],1); index0
+      [2]=corner\_i(indexes[0],2);
+163     yarp::sig::Vector index1(3); index1[0]=corner\_i(indexes[1],0); index1[1]=corner\_i(indexes[1],1); index1
+      [2]=corner\_i(indexes[1],2);
+164     yarp::sig::Vector index2(3); index2[0]=corner\_i(indexes[2],0); index2[1]=corner\_i(indexes[2],1); index2
+      [2]=corner\_i(indexes[2],2);
+165 
+166     yarp::sig::Vector center(3);
+167     center[2]=(point1[2]+index0[2])/2;
+168     center[1]=(point1[1]+index1[1])/2;
+169     center[0]=(point1[0]+index2[0])/2;
+170 
+171     yarp::sig::Vector centerroot=center*boundingBox.orientation.transposed();
+172     \textcolor{keywordflow}{return} centerroot;
+173 \}
+\end{DoxyCode}
+\label{classiCub_1_1data3D_1_1BoundingBox_a08949c30ec7ee296981c11ad5ff4714e} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!get\+Corners@{get\+Corners}}
+\index{get\+Corners@{get\+Corners}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{get\+Corners()}{getCorners()}}
+{\footnotesize\ttfamily std\+::vector$<$ i\+Cub\+::data3\+D\+::\+Point\+X\+YZ $>$ Bounding\+Box\+::get\+Corners (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Return the corners of the Box3D structure. 
+
+\begin{DoxyReturn}{Returns}
+a vector of the 8 corners of the bounding box in 3D. 
+\end{DoxyReturn}
+
+
+Definition at line 47 of file bounding\+Box.\+cpp.
+
+
+
+Referenced by Bounding\+Box().
+
+
+\begin{DoxyCode}
+48 \{
+49     \textcolor{keywordflow}{return} this->boundingBox.corners;
+50 \}
+\end{DoxyCode}
+\label{classiCub_1_1data3D_1_1BoundingBox_a96d06a9d784ac627078353814207ad68} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!get\+Dim@{get\+Dim}}
+\index{get\+Dim@{get\+Dim}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{get\+Dim()}{getDim()}}
+{\footnotesize\ttfamily Vector Bounding\+Box\+::get\+Dim (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Return the dimension of the principal axes, in the same order of the get\+Axis method. 
+
+\begin{DoxyReturn}{Returns}
+a vector containing the dimension of the three principal axes of the bounding box. 
+\end{DoxyReturn}
+
+
+Definition at line 139 of file bounding\+Box.\+cpp.
+
+
+
+Referenced by Bounding\+Box().
+
+
+\begin{DoxyCode}
+140 \{
+141     Matrix corner\_i=convertCorners();
+142     yarp::sig::Vector indexes=findIndexes(corner\_i);
+143 
+144     yarp::sig::Vector point1(3); point1[0]=corner\_i(0,0); point1[1]=corner\_i(0,1); point1[2]=corner\_i(0,2);
+145 
+146     Vector dim(3);
+147     dim[2]=max(point1[2],corner\_i(indexes[0],2))-min(point1[2],corner\_i(indexes[0],2));
+148     dim[1]=max(point1[1],corner\_i(indexes[1],1))-min(point1[1],corner\_i(indexes[1],1));
+149     dim[0]=max(point1[0],corner\_i(indexes[2],0))-min(point1[0],corner\_i(indexes[2],0));
+150 
+151     \textcolor{keywordflow}{return} dim;
+152 \}
+\end{DoxyCode}
+\label{classiCub_1_1data3D_1_1BoundingBox_a2f5c9ef6a7d295e0ae60d1bf51c236b6} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!get\+Orientation@{get\+Orientation}}
+\index{get\+Orientation@{get\+Orientation}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{get\+Orientation()}{getOrientation()}}
+{\footnotesize\ttfamily yarp\+::sig\+::\+Matrix Bounding\+Box\+::get\+Orientation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Return the orientation of the Box3D structure. 
+
+\begin{DoxyReturn}{Returns}
+a the orientation matrix of the bounding box. 
+\end{DoxyReturn}
+
+
+Definition at line 59 of file bounding\+Box.\+cpp.
+
+
+
+Referenced by Bounding\+Box(), and i\+Cub\+::data3\+D\+::\+Minimum\+Bounding\+Box\+::get\+Minimum\+Bounding\+Box().
+
+
+\begin{DoxyCode}
+60 \{
+61     \textcolor{keywordflow}{return} this->boundingBox.orientation;
+62 \}
+\end{DoxyCode}
+\label{classiCub_1_1data3D_1_1BoundingBox_ab9c2a8dfb61a2c0c02529968df5a2e2e} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!set\+Bounding\+Box@{set\+Bounding\+Box}}
+\index{set\+Bounding\+Box@{set\+Bounding\+Box}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{set\+Bounding\+Box()}{setBoundingBox()}}
+{\footnotesize\ttfamily void Bounding\+Box\+::set\+Bounding\+Box (\begin{DoxyParamCaption}\item[{const i\+Cub\+::data3\+D\+::\+Box3D \&}]{bounding\+Box }\end{DoxyParamCaption})}
+
+
+
+Set a Box3D inside the \hyperlink{classiCub_1_1data3D_1_1BoundingBox}{Bounding\+Box} wrapper. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bounding\+Box} & the set Box3D object. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 40 of file bounding\+Box.\+cpp.
+
+
+
+Referenced by Bounding\+Box().
+
+
+\begin{DoxyCode}
+41 \{
+42     this->boundingBox.corners=boundingBox.corners;
+43     this->boundingBox.orientation=boundingBox.orientation;
+44 \}
+\end{DoxyCode}
+\label{classiCub_1_1data3D_1_1BoundingBox_a0cf2386f7eb05f18a69ccca09c589c17} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!set\+Corners@{set\+Corners}}
+\index{set\+Corners@{set\+Corners}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{set\+Corners()}{setCorners()}}
+{\footnotesize\ttfamily void Bounding\+Box\+::set\+Corners (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ i\+Cub\+::data3\+D\+::\+Point\+X\+YZ $>$ \&}]{corners }\end{DoxyParamCaption})}
+
+
+
+Set the corners of the bounding box. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em corners} & a vector of the 8 corners of the bounding box in 3D. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 53 of file bounding\+Box.\+cpp.
+
+
+
+Referenced by Bounding\+Box(), and i\+Cub\+::data3\+D\+::\+Minimum\+Bounding\+Box\+::get\+Minimum\+Bounding\+Box().
+
+
+\begin{DoxyCode}
+54 \{
+55     this->boundingBox.corners=corners;
+56 \}
+\end{DoxyCode}
+\label{classiCub_1_1data3D_1_1BoundingBox_a9d2cc0a0613750a48567f118d3b3a0eb} 
+\index{i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}!set\+Orientation@{set\+Orientation}}
+\index{set\+Orientation@{set\+Orientation}!i\+Cub\+::data3\+D\+::\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{set\+Orientation()}{setOrientation()}}
+{\footnotesize\ttfamily void Bounding\+Box\+::set\+Orientation (\begin{DoxyParamCaption}\item[{const yarp\+::sig\+::\+Matrix \&}]{orientation }\end{DoxyParamCaption})}
+
+
+
+Modify the orientation of the bounding box. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em orientation} & the orientation matrix of the bounding box. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 65 of file bounding\+Box.\+cpp.
+
+
+
+Referenced by Bounding\+Box(), and i\+Cub\+::data3\+D\+::\+Minimum\+Bounding\+Box\+::get\+Minimum\+Bounding\+Box().
+
+
+\begin{DoxyCode}
+66 \{
+67     this->boundingBox.orientation=orientation;
+68 \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/dev/icub-\/contrib-\/iit/grasp/lib/minimum\+Bounding\+Box/include/i\+Cub/data3\+D/bounding\+Box.\+h\item 
+C\+:/dev/icub-\/contrib-\/iit/grasp/lib/minimum\+Bounding\+Box/src/bounding\+Box.\+cpp\end{DoxyCompactItemize}

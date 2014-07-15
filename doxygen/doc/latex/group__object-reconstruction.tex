@@ -1,0 +1,72 @@
+\section{object-\/reconstruction}
+\label{group__object-reconstruction}\index{object-\/reconstruction@{object-\/reconstruction}}
+
+
+A module to reconstruct in 3D a set of pixel and visualize the reconstruction.  
+
+
+A module to reconstruct in 3D a set of pixel and visualize the reconstruction. 
+
+\hypertarget{group__handIKModule_intro_sec}{}\subsection{Description}\label{group__handIKModule_intro_sec}
+This module, given a set of pixels, returns the point cloud along with the minimum enclosing bounding box. It usually employs the graph\+Based\+Segmentation module, which provides all the pixels belonging to a certain segment of the image, but it can be used with any other segmentation module that retrieves the list of pixels belonging to the object to be reconstructed.\hypertarget{group__handIKModule_rpc_port}{}\subsection{Commands\+:}\label{group__handIKModule_rpc_port}
+The commands sent as bottles to the module port /$<$mod\+Name$>$/rpc are described in the following\+:
+
+{\bfseries H\+E\+LP} ~\newline
+format\+: \mbox{[}help\mbox{]} ~\newline
+action\+: it returns the list of the things to do to use the module properly.
+
+{\bfseries P\+I\+X\+EL} ~\newline
+format\+: \mbox{[}u v\mbox{]} ~\newline
+action\+: the pixel is given to the segmentation module, which responds with the pixels belonging to the chosen segment.
+
+{\bfseries R\+E\+C\+O\+N\+S\+T\+R\+U\+CT} ~\newline
+format\+: \mbox{[}3\+Drec\mbox{]} \char`\"{}param1\char`\"{}~\newline
+action\+: the set of pixels are projected in 3D and provided on the output port -- typically /object-\/reconstruction/mesh\+:o. The optional parameter \char`\"{}param1\char`\"{} can be set to \char`\"{}visualize\char`\"{}; in this case the reconstructed cloud will also be displayed using Point Cloud Library library.
+
+{\bfseries C\+H\+A\+N\+GE N\+A\+ME} ~\newline
+format\+: \mbox{[}name (new\+Name)\mbox{]}~\newline
+action\+: The reconstructed pointclouds will be saved as new\+Name\+X.\+ply, where new\+Name is thename given by the user and X is number increasing for each reconstruction saved on the same root name. Default name is 3\+Dobject.
+
+{\bfseries G\+ET} ~\newline
+format\+: \mbox{[}get point (u v)\mbox{]}~\newline
+action\+: The pixel (u v) is projected in 3D and returned in the format (x y z).
+
+{\bfseries S\+ET} ~\newline
+format\+: \mbox{[}set write param\mbox{]}~\newline
+action\+: If param is set to on, the reconstructed point cloud will be written in the home context path folder. This functionality can be turned off by setting param to off.\hypertarget{group__handIKModule_lib_sec}{}\subsection{Libraries}\label{group__handIKModule_lib_sec}
+
+\begin{DoxyItemize}
+\item Y\+A\+RP libraries.
+\item objects3D library
+\item \hyperlink{group__minimumBoundingBox}{minimum\+Bounding\+Box} library
+\item stereo-\/vision library
+\item Open\+CV library
+\item Point Cloud Library.
+\end{DoxyItemize}\hypertarget{group__handIKModule_portsc_sec}{}\subsection{Ports Created}\label{group__handIKModule_portsc_sec}
+
+\begin{DoxyItemize}
+\item {\itshape /} $<$mod\+Name$>$/rpc remote procedure call. It always replies something.
+\item {\itshape /} $<$mod\+Name$>$/segmentation this is the port through which the pixel belonging to the object is sent to the segmentation module, and the set of pixels belonging to the object are returned.
+\item {\itshape /} $<$mod\+Name$>$/mesh\+:o this is the port where the reconstructed object is returned.
+\end{DoxyItemize}\hypertarget{group__handIKModule_parameters_sec}{}\subsection{Parameters}\label{group__handIKModule_parameters_sec}
+The following are the options that are usually contained in the configuration file\+:
+
+--name {\itshape name} 
+\begin{DoxyItemize}
+\item specify the module name, which is {\itshape object-\/reconstruction} by default.
+\end{DoxyItemize}
+
+--robot {\itshape robot} 
+\begin{DoxyItemize}
+\item specify the robot that has to be used. It is icub by default.
+\end{DoxyItemize}
+
+-- compute\+BB {\itshape compute\+BB} 
+\begin{DoxyItemize}
+\item tells if the algorithm has also to compute the minimum enclosing bounding box. It can be on or off.
+\end{DoxyItemize}\hypertarget{group__handIKModule_tested_os_sec}{}\subsection{Tested OS}\label{group__handIKModule_tested_os_sec}
+Windows, Linux
+
+\begin{DoxyAuthor}{Author}
+Ilaria Gori 
+\end{DoxyAuthor}

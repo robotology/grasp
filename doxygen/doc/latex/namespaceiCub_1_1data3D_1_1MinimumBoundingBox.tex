@@ -1,0 +1,156 @@
+\section{i\+Cub\+:\+:data3D\+:\+:Minimum\+Bounding\+Box Namespace Reference}
+\label{namespaceiCub_1_1data3D_1_1MinimumBoundingBox}\index{i\+Cub\+::data3\+D\+::\+Minimum\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Minimum\+Bounding\+Box}}
+
+
+The Definition of the \hyperlink{namespaceiCub_1_1data3D_1_1MinimumBoundingBox}{Minimum\+Bounding\+Box}.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classiCub_1_1data3D_1_1BoundingBox}{i\+Cub\+::data3\+D\+::\+Bounding\+Box} \hyperlink{namespaceiCub_1_1data3D_1_1MinimumBoundingBox_a4ca6345989a239a51977bf93d7ce085c}{get\+Minimum\+Bounding\+Box} (pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr cloud)
+\begin{DoxyCompactList}\small\item\em Given a point cloud (defined in the Point Cloud Library), it computes the minimum enclosing bounding box. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The Definition of the \hyperlink{namespaceiCub_1_1data3D_1_1MinimumBoundingBox}{Minimum\+Bounding\+Box}. 
+
+\subsection{Function Documentation}
+\label{namespaceiCub_1_1data3D_1_1MinimumBoundingBox_a4ca6345989a239a51977bf93d7ce085c} 
+\index{i\+Cub\+::data3\+D\+::\+Minimum\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Minimum\+Bounding\+Box}!get\+Minimum\+Bounding\+Box@{get\+Minimum\+Bounding\+Box}}
+\index{get\+Minimum\+Bounding\+Box@{get\+Minimum\+Bounding\+Box}!i\+Cub\+::data3\+D\+::\+Minimum\+Bounding\+Box@{i\+Cub\+::data3\+D\+::\+Minimum\+Bounding\+Box}}
+\subsubsection{\texorpdfstring{get\+Minimum\+Bounding\+Box()}{getMinimumBoundingBox()}}
+{\footnotesize\ttfamily \hyperlink{classiCub_1_1data3D_1_1BoundingBox}{Bounding\+Box} i\+Cub\+::data3\+D\+::\+Minimum\+Bounding\+Box\+::get\+Minimum\+Bounding\+Box (\begin{DoxyParamCaption}\item[{pcl\+::\+Point\+Cloud$<$ pcl\+::\+Point\+X\+Y\+Z\+R\+GB $>$\+::Ptr}]{cloud }\end{DoxyParamCaption})}
+
+
+
+Given a point cloud (defined in the Point Cloud Library), it computes the minimum enclosing bounding box. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cloud} & the input point cloud. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a \hyperlink{classiCub_1_1data3D_1_1BoundingBox}{Bounding\+Box} object, which encloses the input point cloud. 
+\end{DoxyReturn}
+
+
+Definition at line 212 of file min\+Bound\+Box.\+cpp.
+
+
+
+References i\+Cub\+::data3\+D\+::\+Bounding\+Box\+::get\+Orientation(), i\+Cub\+::data3\+D\+::\+Bounding\+Box\+::set\+Corners(), and i\+Cub\+::data3\+D\+::\+Bounding\+Box\+::set\+Orientation().
+
+
+\begin{DoxyCode}
+213 \{
+214     BoundingBox bb;
+215     std::vector< pcl::Vertices > polygons;
+216     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud\_hull (\textcolor{keyword}{new} pcl::PointCloud<pcl::PointXYZRGB>);
+217     pcl::ConvexHull<pcl::PointXYZRGB> chull;
+218     chull.setInputCloud (cloud);
+219     chull.setDimension(3);
+220     chull.reconstruct (*cloud\_hull,polygons);
+221 
+222     yarp::sig::Vector x1;
+223     yarp::sig::Vector x2;
+224     yarp::sig::Vector x3;
+225     yarp::sig::Vector y1;
+226     yarp::sig::Vector y2;
+227     yarp::sig::Vector y3;
+228     yarp::sig::Vector z1;
+229     yarp::sig::Vector z2;
+230     yarp::sig::Vector z3;
+231 
+232     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<polygons.size(); i++)
+233     \{
+234         pcl::Vertices vertex=polygons.at(i);
+235         x1.push\_back(cloud\_hull->at(vertex.vertices[0]).x);
+236         x2.push\_back(cloud\_hull->at(vertex.vertices[1]).x);
+237         x3.push\_back(cloud\_hull->at(vertex.vertices[2]).x);
+238         y1.push\_back(cloud\_hull->at(vertex.vertices[0]).y);
+239         y2.push\_back(cloud\_hull->at(vertex.vertices[1]).y);
+240         y3.push\_back(cloud\_hull->at(vertex.vertices[2]).y);
+241         z1.push\_back(cloud\_hull->at(vertex.vertices[0]).z);
+242         z2.push\_back(cloud\_hull->at(vertex.vertices[1]).z);
+243         z3.push\_back(cloud\_hull->at(vertex.vertices[2]).z);
+244     \}
+245 
+246     Matrix pointCloud(cloud\_hull->size(),3);
+247     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<cloud\_hull->size(); i++)
+248     \{
+249         pointCloud(i,0)=cloud\_hull->at(i).x;
+250         pointCloud(i,1)=cloud\_hull->at(i).y;
+251         pointCloud(i,2)=cloud\_hull->at(i).z;
+252     \}
+253 
+254     yarp::sig::Vector v1x=x2-x1;
+255     yarp::sig::Vector v1y=y2-y1;
+256     yarp::sig::Vector v1z=z2-z1;
+257     std::vector<yarp::sig::Vector> edges1;
+258 
+259     retrieveEdges(v1x,v1y,v1z,edges1);
+260 
+261     yarp::sig::Vector v2x=x3-x1;
+262     yarp::sig::Vector v2y=y3-y1;
+263     yarp::sig::Vector v2z=z3-z1;
+264     std::vector<yarp::sig::Vector> edges2;
+265 
+266     retrieveEdges2(v2x,v2y,v2z,edges1,edges2);
+267 
+268     std::vector<yarp::sig::Vector> crossProduct;
+269     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<edges1.size(); i++)
+270     \{
+271         yarp::sig::Vector vect=cross(edges1.at(i),edges2.at(i));
+272         crossProduct.push\_back(vect);
+273     \}
+274 
+275     yarp::sig::Vector alpha;
+276     yarp::sig::Vector beta;
+277     yarp::sig::Vector gamma;
+278     eulerAngles(edges1, edges2, crossProduct, alpha, beta, gamma);
+279 
+280     Matrix minmax(2,3);
+281     \textcolor{keywordtype}{double} minVol=100000;
+282     Matrix rot2;
+283 
+284     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<alpha.size(); i++)
+285     \{
+286         Matrix rot;
+287         buildRotMat3(alpha[i],beta[i],gamma[i],rot);
+288         Matrix xyz\_i=pointCloud*rot;
+289         findRotation(xyz\_i,rot2);
+290 
+291         Matrix rot3dim=eye(3,3);
+292         rot3dim.setSubmatrix(rot2,0,0);
+293         Matrix rotation=rot*rot3dim;
+294 
+295         xyz\_i=pointCloud*rotation;
+296         yarp::sig::Vector minimum;
+297         Helpers::min(xyz\_i,minimum);
+298         yarp::sig::Vector maximum;
+299         Helpers::max(xyz\_i,maximum);
+300         yarp::sig::Vector h=maximum-minimum;
+301 
+302         \textcolor{keywordtype}{double} prod=h[0]*h[1]*h[2];
+303         \textcolor{keywordflow}{if} (prod<minVol)
+304         \{
+305             minVol=prod;
+306             bb.setOrientation(rotation);
+307             minmax.setRow(0,minimum);
+308             minmax.setRow(1,maximum);
+309         \}
+310     \}
+311     Matrix cornerpointsTmp(8,3);
+312     assignCorners(minmax,cornerpointsTmp);
+313     Matrix cornerpoints=cornerpointsTmp*(bb.getOrientation().transposed());
+314 
+315     std::vector<iCub::data3D::PointXYZ> corners;
+316     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i=0; i<cornerpoints.rows(); i++)
+317         corners.push\_back(PointXYZ(cornerpoints(i,0),cornerpoints(i,1),cornerpoints(i,2)));
+318 
+319     bb.setCorners(corners);
+320     \textcolor{keywordflow}{return} bb;
+321 \}
+\end{DoxyCode}
