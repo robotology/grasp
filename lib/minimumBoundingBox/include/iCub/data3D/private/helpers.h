@@ -14,8 +14,8 @@
  * Public License for more details
 */
 
-#ifndef __HELPERS_H_
-#define __HELPERS_H_
+#ifndef __HELPERS_H__
+#define __HELPERS_H__
 
 #include <string>
 #include <cmath>

@@ -115,7 +115,7 @@ action: returns ACK if the grasp has been successfully executed by ARE, otherwis
 
 \section lib_sec Libraries 
 - YARP libraries. 
-- \ref data3D library
+- \ref objects3D library
 - \ref minimumBoundingBox library
 - \ref OpenCV library
 - \ref Point Cloud Library.
