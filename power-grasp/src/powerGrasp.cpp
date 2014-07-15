@@ -77,7 +77,7 @@ void PowerGrasp::configureGeneralInfo(ResourceFinder &rf)
     numberOfBestPoints=rf.check("numberOfBestPoints",Value(10)).asInt();
     bestCurvature=(float)rf.check("curvature",Value(0.005)).asDouble();
     handSize=rf.check("handSize",Value(0.08)).asDouble();
-    fingerSize=rf.check("fingerSize",Value(0.1)).asDouble();
+    fingerSize=rf.check("fingerSize",Value(0.08)).asDouble();
     string useFile=rf.check("fromFile",Value("false")).asString().c_str();
     string useLearning=rf.check("useLearning",Value("false")).asString().c_str();
     fromFile=(useFile=="true");
@@ -89,14 +89,20 @@ void PowerGrasp::configureGeneralInfo(ResourceFinder &rf)
     sizey=rf.check("h",Value(240)).asInt();
     visualizationThread->setSize(sizex, sizey);
 
-    if (!rf.check("disable_right"))
+    if (!rf.check("disableRight"))
         orientationThreadRight=new OrientationThread();
     else
+    {
         rightDisabled=true;
-    if (!rf.check("disable_left"))
+        printf("**********RIGHT ARM DISABLED**************\n");
+    }
+    if (!rf.check("disableLeft"))
         orientationThreadLeft=new OrientationThread();
     else
+    {
         leftDisabled=true;
+        printf("**********LEFT ARM DISABLED**************\n");
+    }
 }
 
 /************************************************************************/
@@ -502,8 +508,6 @@ void PowerGrasp::chooseCandidatePoints()
     else
         currentCurvature=bestCurvature;
 
-    computeDim();
-
     currentModality=modality;
 
     if (currentModality==MODALITY_AUTO)   
@@ -574,6 +578,8 @@ bool PowerGrasp::updateModule()
             write(cloud,nFile);
             nFile++;
         }
+
+        computeDim();
 
         normalEstimation();
 
@@ -762,7 +768,7 @@ void PowerGrasp::manageModality(int &currentModality)
         blockLeftTmp=true;
     }
 
-    if (dimz<handSize/2)
+    if (dimz<handSize/2 || dimz<fingerSize)
     {
         printf("object too small to be taken from side %g\n", dimz);
         currentModality=MODALITY_TOP;
@@ -873,10 +879,12 @@ void PowerGrasp::askToGrasp()
 
     yarp::sig::Vector tmp=dcm2axis(chosenOrientation);
 
+    printf("dimz %g fingerSize %g\n", dimz, fingerSize);
+
     if (currentModality=MODALITY_TOP && dimz<fingerSize)
     {
         double diff=fingerSize-dimz;
-        chosenPoint+=chosenNormal*diff;
+        chosenPoint+=(chosenNormal*diff);
         printf("dbg: chosen point %s\n", chosenPoint.toString().c_str());
     }
 
@@ -1679,8 +1687,8 @@ bool PowerGrasp::normalPointingOut(const int index, const yarp::sig::Vector &cen
 /************************************************************************/
 void PowerGrasp::computeDim()
 {
-    maxy=0.0;
-    maxz=0.0;
+    maxy=-1.0;
+    maxz=-1.0;
     double miny=1.0;
     double minz=1.0;
 	for (int i=0; i<cloudxyz->size(); i++)
@@ -1697,6 +1705,7 @@ void PowerGrasp::computeDim()
             minz=point.z;
     }
 
+    printf("maxz %g minz %g max-min %g\n", maxz, minz, maxz-minz);
     dimz=maxz-minz;
     dimy=maxy-miny;
 }

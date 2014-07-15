@@ -204,16 +204,16 @@ void OrientationThread::run()
             if (dot(x,biggestAxis)<-0.4 || dot(x,biggestAxis)>0.4)
                 continue;
 
-            /*if (hand=="right_arm")
+            if (hand=="right_arm")
             {
-                if (orientation(0,0)>0.1)// || orientation(2,1)>0.5 || orientation(2,0)<-0.1)
+                if (orientation(0,0)>0.1 || orientation(2,1)>0.5 || orientation(2,0)<-0.1)
                     continue;
             }
             else
             {
-                if (orientation(0,0)>0.1)// || orientation(2,1)>0.5 || orientation(2,0)<-0.1)
+                if (orientation(0,0)>0.1 || orientation(2,1)>0.5 || orientation(2,0)<-0.1)
                     continue;
-            }*/
+            }
 
             noResult=false;
 
