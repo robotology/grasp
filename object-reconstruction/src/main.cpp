@@ -16,7 +16,7 @@
 
 /** 
 @ingroup robotology
-\defgroup objectReconstruction objectReconstruction
+\defgroup object-reconstruction object-reconstruction
 
 A module to reconstruct in 3D a set of pixel and visualize the reconstruction. 
 

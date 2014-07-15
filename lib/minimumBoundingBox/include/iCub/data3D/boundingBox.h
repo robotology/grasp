@@ -18,7 +18,7 @@
  * \defgroup boundingBox boundingBox
  * @ingroup data3D
  *
- * Wrapper to deal with Box3D elements, defined inside thrift3D folder. This class provides
+ * Wrapper to deal with Box3D elements, defined inside objects3D folder. This class provides
  * methods to get and set the main features of a 3D box (corners, orientation, principal axes and their
  * dimension, center). It also provides a function to draw a 3D box in a PCLVisualizer. It needs Point
  * Cloud Library and qhull to be compiled.
