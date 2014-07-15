@@ -23,7 +23,7 @@ PCL has also a lot of dependencies. Most of them can be installed with the class
 - vtk >= 5.6
 - qhull 2009
 
-I recommend to install boost and eigen from sudo-apt get install. Flann and vtk can be installed easily also from sources, but you can still install them using sudo apt-get install. qhull needs definitely to be installed from sources, as there is a problem between newer version of qhull and PCL >= 1.7.0, at least on Debian systems. For those who have windows, it is usually enough to install the dependencies using binaries. Once you have all the dependencies, you can download the source code of PCL 1.7.0 (or PCL 1.7.1), compile it and install it.
+We recommend to install `boost` and `eigen` from `sudo-apt get install`. `Flann` and `vtk` can be installed easily also from sources, but you can still install them using `sudo apt-get install`. The dependency `qhull` needs definitely to be installed from sources, as there is a problem between newer version of qhull and PCL >= 1.7.0, at least on Debian systems. For those who have Windows, it is usually enough to install the dependencies using binaries. Once you have all the dependencies, you can download the source code of `PCL 1.7.0` (or `PCL 1.7.1`), compile it and install it.
 
 ## Documentation
 
