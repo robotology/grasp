@@ -52,6 +52,11 @@ namespace iCub
 {
 namespace data3D
 {
+/**
+* @ingroup minimumBoundingBox
+*
+* The Definition of the MinimumBoundingBox.
+*/
 namespace MinimumBoundingBox
 {
     /**
