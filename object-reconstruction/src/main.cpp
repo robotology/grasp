@@ -57,7 +57,7 @@ action: If param is set to on, the reconstructed point cloud will be written in 
 
 \section lib_sec Libraries 
 - YARP libraries. 
-- \ref data3D library
+- \ref objects3D library
 - \ref minimumBoundingBox library
 - \ref stereo-vision library
 - \ref OpenCV library
