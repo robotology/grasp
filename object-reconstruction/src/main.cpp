@@ -111,6 +111,7 @@ int main(int argc, char *argv[])
     ResourceFinder rf;
     rf.setVerbose(true);
     rf.setDefaultContext("object-reconstruction");
+    rf.setDefaultConfigFile("config.ini");
     rf.configure(argc,argv);
 
     ObjectReconstr mod;
