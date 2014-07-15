@@ -27,7 +27,7 @@ We recommend to install `boost` and `eigen` from `sudo-apt get install`. `Flann`
 
 ## Documentation
 
-Online documentation is available here: [http://robotology-playground.github.io/grasp](http://robotology.github.io/grasp).
+Online documentation is available here: [http://robotology.github.io/grasp](http://robotology.github.io/grasp).
 
 ## License
 
