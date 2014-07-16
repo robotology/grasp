@@ -32,6 +32,7 @@ using namespace iCub::grasp;
 using namespace pcl::io;
 using namespace pcl;
 
+/************************************************************************/
 PrecisionGrasp::PrecisionGrasp() : cloud(new pcl::PointCloud<pcl::PointXYZRGB>), 
     cloudxyz(new pcl::PointCloud<pcl::PointXYZ>),
     normals (new pcl::PointCloud <pcl::Normal>)
@@ -67,6 +68,7 @@ PrecisionGrasp::PrecisionGrasp() : cloud(new pcl::PointCloud<pcl::PointXYZRGB>),
     psoThreadFitness4=new PsoThread();
 }
 
+/************************************************************************/
 bool PrecisionGrasp::configure(ResourceFinder &rf)
 {
     radiusSearch=rf.check("radiusSearch",Value(0.045)).asDouble();
@@ -174,6 +176,7 @@ bool PrecisionGrasp::configure(ResourceFinder &rf)
     return true;
 }
 
+/************************************************************************/
 bool PrecisionGrasp::openDevices()
 {
     Property optCtrlRight;
@@ -309,6 +312,7 @@ bool PrecisionGrasp::openDevices()
     return true;
 }
 
+/************************************************************************/
 string PrecisionGrasp::extractData(const yarp::os::Bottle &data, const int t)
 {
     Bottle &b=const_cast<Bottle&>(data);
@@ -405,6 +409,7 @@ string PrecisionGrasp::extractData(const yarp::os::Bottle &data, const int t)
     return hand;
 }
 
+/************************************************************************/
 void PrecisionGrasp::fillVectorFromBottle(const yarp::os::Bottle* b, yarp::sig::Vector &v)
 {
     v.resize(b->size());
@@ -412,6 +417,7 @@ void PrecisionGrasp::fillVectorFromBottle(const yarp::os::Bottle* b, yarp::sig::
         v[i]=b->get(i).asDouble();
 }
 
+/************************************************************************/
 bool PrecisionGrasp::interruptModule()
 {
     eventRpc.signal();
@@ -449,6 +455,7 @@ bool PrecisionGrasp::interruptModule()
     return true;
 }
 
+/************************************************************************/
 bool PrecisionGrasp::close()
 {
     ikPort1r.close();
@@ -509,6 +516,7 @@ bool PrecisionGrasp::close()
     return true;
 }
 
+/************************************************************************/
 void PrecisionGrasp::filter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in,pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in_filtered, bool second)
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_tmp (new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -519,6 +527,7 @@ void PrecisionGrasp::filter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in,pcl:
     sor.filter (*cloud_in_filtered);
 }
 
+/************************************************************************/
 void PrecisionGrasp::write(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in, const string &fileName)
 {
     ofstream myfile;
@@ -544,6 +553,7 @@ void PrecisionGrasp::write(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in, cons
     myfile.close();
 }
 
+/************************************************************************/
 void PrecisionGrasp::write(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_in, pcl::PointCloud <pcl::Normal>::Ptr n, const string &fileName)
 {
     ofstream myfile;
@@ -555,6 +565,7 @@ void PrecisionGrasp::write(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_in, pcl::Po
     myfile.close();
 }
 
+/************************************************************************/
 void PrecisionGrasp::fromSurfaceMesh (const SurfaceMeshWithBoundingBox& msg)
 {
     cloud->clear();
@@ -588,6 +599,7 @@ void PrecisionGrasp::fromSurfaceMesh (const SurfaceMeshWithBoundingBox& msg)
     boundingBox.setBoundingBox(msg.boundingBox);
 }
 
+/************************************************************************/
 bool PrecisionGrasp::fillCloudFromFile()
 {
     struct dirent *entry;
@@ -635,6 +647,7 @@ bool PrecisionGrasp::fillCloudFromFile()
     return true;
 }
 
+/************************************************************************/
 void PrecisionGrasp::sampleClouds(pcl::PointCloud<pcl::PointXYZ>::Ptr c, pcl::PointCloud <pcl::Normal>::Ptr n)
 {
     pcl::octree::OctreePointCloudSearch<pcl::PointXYZ> octree (128.0f);
@@ -680,6 +693,7 @@ void PrecisionGrasp::sampleClouds(pcl::PointCloud<pcl::PointXYZ>::Ptr c, pcl::Po
     printf("points %d\n", c->size());
 }
 
+/************************************************************************/
 bool PrecisionGrasp::updateModule()
 {
     if ((fromFile && !fromFileFinished) || (current_state==STATE_ESTIMATE))
@@ -907,6 +921,7 @@ bool PrecisionGrasp::updateModule()
     return true;
 }
 
+/************************************************************************/
 void PrecisionGrasp::associateDim()
 {
     yarp::sig::Vector x,y,z;
@@ -973,6 +988,7 @@ void PrecisionGrasp::associateDim()
     dim=dim_tmp;
 }
 
+/************************************************************************/
 void PrecisionGrasp::readData(pcl::PointCloud<pcl::PointXYZ>::Ptr c, pcl::PointCloud <pcl::Normal>::Ptr n)
 {
     ifstream infile("C:\\Users\\Utente\\MATLABdata\\points\\points1.txt");
@@ -986,6 +1002,7 @@ void PrecisionGrasp::readData(pcl::PointCloud<pcl::PointXYZ>::Ptr c, pcl::PointC
     }
 }
 
+/************************************************************************/
 double PrecisionGrasp::getZDim(const yarp::sig::Vector &vx, const yarp::sig::Vector &vy, const yarp::sig::Vector &vz)
 {
     yarp::sig::Vector z(3,0.0); z[2]=1.0;
@@ -1003,6 +1020,7 @@ double PrecisionGrasp::getZDim(const yarp::sig::Vector &vx, const yarp::sig::Vec
         return norm(vz);
 }
 
+/************************************************************************/
 yarp::os::Bottle PrecisionGrasp::prepareData(const iCub::grasp::ContactPoints &triplet, const int c)
 {
     Bottle res;
@@ -1063,6 +1081,7 @@ yarp::os::Bottle PrecisionGrasp::prepareData(const iCub::grasp::ContactPoints &t
     return res;
 }
 
+/************************************************************************/
 void PrecisionGrasp::askToGrasp()
 {
     Bottle b,reply;
@@ -1226,12 +1245,14 @@ void PrecisionGrasp::askToGrasp()
     iCtrl->restoreContext(curr_context);*/
 }
 
+/************************************************************************/
 void PrecisionGrasp::fillBottleFromVector(const yarp::sig::Vector &vect, yarp::os::Bottle *b)
 {
     for (unsigned int i=0; i<vect.size(); i++)
         b->addDouble(vect[i]);
 }
 
+/************************************************************************/
 void PrecisionGrasp::writeBestSolution()
 {
     std::vector<yarp::sig::Vector> contacts_r;
@@ -1375,6 +1396,7 @@ void PrecisionGrasp::writeBestSolution()
         toMatlab.writeStrict();
 }
 
+/************************************************************************/
 void PrecisionGrasp::writeToMatlab(const std::vector<yarp::sig::Vector> &contacts_r, const std::vector<yarp::sig::Vector> &normals_r, const std::string &hand)
 {
     Bottle &out=toMatlab.prepare();
@@ -1483,6 +1505,7 @@ void PrecisionGrasp::writeToMatlab(const std::vector<yarp::sig::Vector> &contact
         toMatlab.writeStrict();
 }
 
+/************************************************************************/
 void PrecisionGrasp::writeIKBestresult()
 {
     std::vector<yarp::sig::Vector> contacts_r;
@@ -1562,6 +1585,7 @@ void PrecisionGrasp::writeIKBestresult()
         file.close();
 }
 
+/************************************************************************/
 void PrecisionGrasp::writeIKresult(const std::vector<yarp::sig::Vector> &contacts_r, const std::vector<yarp::sig::Vector> &normals_r, const int c, const string &hand, const int ov_cones)
 {
     stringstream ss;
@@ -1617,6 +1641,7 @@ void PrecisionGrasp::writeIKresult(const std::vector<yarp::sig::Vector> &contact
         file.close();
 }
 
+/************************************************************************/
 bool PrecisionGrasp::respond(const Bottle& command, Bottle& reply) 
 {
     string tag_0=command.get(0).asString().c_str();
@@ -1926,6 +1951,7 @@ bool PrecisionGrasp::respond(const Bottle& command, Bottle& reply)
     return true;
 }
 
+/************************************************************************/
 void PrecisionGrasp::addPointCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in)
 {
     cloud->clear();
@@ -1943,11 +1969,13 @@ void PrecisionGrasp::addPointCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_
     }
 }
 
+/************************************************************************/
 double PrecisionGrasp::getPeriod()
 {
     return 0.1;
 }
 
+/************************************************************************/
 bool PrecisionGrasp::normalPointingOut(pcl::Normal &normal, pcl::PointXYZ &point)
 {
     yarp::sig::Vector p(3);
@@ -1965,3 +1993,4 @@ bool PrecisionGrasp::normalPointingOut(pcl::Normal &normal, pcl::PointXYZ &point
     
     return (dot(n,fromCenter)<0);
 }
+

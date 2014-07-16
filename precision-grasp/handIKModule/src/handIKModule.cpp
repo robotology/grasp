@@ -23,12 +23,14 @@ using namespace yarp::math;
 using namespace iCub::ctrl;
 using namespace iCub::iKin;
 
+/************************************************************************/
 HandIKModule::HandIKModule()
 {
     done=true;
     work=false;
 }
 
+/************************************************************************/
 bool HandIKModule::configure(ResourceFinder &rf)
 {
     string name=rf.check("name",Value("handIKModule1")).asString().c_str();
@@ -46,6 +48,7 @@ bool HandIKModule::configure(ResourceFinder &rf)
     return true;
 }
 
+/************************************************************************/
 bool HandIKModule::extractData(const Bottle &data)
 {
     Bottle &b=const_cast<Bottle&>(data);
@@ -85,6 +88,7 @@ bool HandIKModule::extractData(const Bottle &data)
     return true;
 }
 
+/************************************************************************/
 void HandIKModule::fillMatrixFromBottle(const Bottle* b, yarp::sig::Matrix &m, int rows, int cols)
 {
     int k=0;
@@ -99,6 +103,7 @@ void HandIKModule::fillMatrixFromBottle(const Bottle* b, yarp::sig::Matrix &m, i
     }
 }
 
+/************************************************************************/
 void HandIKModule::fillVectorFromBottle(const Bottle* b, yarp::sig::Vector &v)
 {
     v.resize(b->size());
@@ -106,6 +111,7 @@ void HandIKModule::fillVectorFromBottle(const Bottle* b, yarp::sig::Vector &v)
         v[i]=b->get(i).asDouble();
 }
 
+/************************************************************************/
 bool HandIKModule::interruptModule()
 {
 	printf("interrupting\n");
@@ -116,6 +122,7 @@ bool HandIKModule::interruptModule()
     return true;
 }
 
+/************************************************************************/
 bool HandIKModule::close()
 {
 	printf("closing\n");
@@ -126,6 +133,7 @@ bool HandIKModule::close()
     return true;
 }
 
+/************************************************************************/
 bool HandIKModule::updateModule()
 {
     if (work)
@@ -210,6 +218,7 @@ bool HandIKModule::updateModule()
     return true;
 }
 
+/************************************************************************/
 double HandIKModule::evaluateFingers(const HandIK_Variables &solution, const int id)
 {
     yarp::sig::Vector encoders(9,0.0);
@@ -256,6 +265,7 @@ double HandIKModule::evaluateFingers(const HandIK_Variables &solution, const int
     return res;
 }
 
+/************************************************************************/
 void HandIKModule::fromRootToObject()
 {
     /*Matrix rot_tran=zeros(4,4);
@@ -295,6 +305,7 @@ void HandIKModule::fromRootToObject()
     normals_o.push_back(n3);
 }
 
+/************************************************************************/
 void HandIKModule::createCombinationVector()
 {
     Vector v1(3); v1[0]=0; v1[1]=1; v1[2]=2;
@@ -311,6 +322,7 @@ void HandIKModule::createCombinationVector()
     combinations.push_back(v6);
 }
 
+/************************************************************************/
 bool HandIKModule::respond(const Bottle& command, Bottle& reply) 
 {
     tag=command.get(0).asString();
@@ -334,6 +346,7 @@ bool HandIKModule::respond(const Bottle& command, Bottle& reply)
     return true;
 }
 
+/************************************************************************/
 void HandIKModule::prepareData(yarp::os::Bottle &data)
 {
     data.addString(tag.c_str());
@@ -389,6 +402,7 @@ void HandIKModule::prepareData(yarp::os::Bottle &data)
     combination.addInt((int)combinations.at(winnerIndex)[2]);
 }
 
+/************************************************************************/
 double HandIKModule::getPeriod()
 {
     return 0.1;

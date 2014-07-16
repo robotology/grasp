@@ -25,6 +25,7 @@ using namespace iCub::ctrl;
 using namespace iCub::iKin;
 using namespace iCub::grasp;
 
+/************************************************************************/
 PsoThread::PsoThread() : RateThread(20), cloud(new pcl::PointCloud<pcl::PointXYZ>),
     normals (new pcl::PointCloud <pcl::Normal>)
 {
@@ -38,6 +39,7 @@ PsoThread::PsoThread() : RateThread(20), cloud(new pcl::PointCloud<pcl::PointXYZ
     octree.setResolution(resolution);*/
 }
 
+/************************************************************************/
 bool PsoThread::open(const Property &options)
 {
     Property &opt=const_cast<Property&>(options);
@@ -60,6 +62,7 @@ bool PsoThread::open(const Property &options)
     return true;
 }
 
+/************************************************************************/
 void PsoThread::setData(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, pcl::PointCloud <pcl::Normal>::Ptr normals, double alpha, int overlapping_cones)
 {
     this->cloud->clear();
@@ -74,6 +77,7 @@ void PsoThread::setData(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, pcl::PointClo
     fg=1e10;
 }
 
+/************************************************************************/
 void PsoThread::run()
 {
     if (work)
@@ -258,6 +262,7 @@ void PsoThread::run()
     this->suspend();
 }
 
+/************************************************************************/
 yarp::sig::Vector PsoThread::findRandomId()
 {
     yarp::sig::Vector ids(3);
@@ -295,6 +300,7 @@ yarp::sig::Vector PsoThread::findRandomId()
     return ids;
 }
 
+/************************************************************************/
 void PsoThread::initialization()
 {
     yarp::sig::Vector idx(3);
@@ -331,11 +337,13 @@ void PsoThread::initialization()
     init=false;
 }
 
+/************************************************************************/
 bool PsoThread::isSuccessful()
 {
     return set;
 }
 
+/************************************************************************/
 ContactPoints PsoThread::getBestTriplet()
 {
     ContactPoints triplet=fillContactPoints(g,nsg);
@@ -365,11 +373,13 @@ ContactPoints PsoThread::getBestTriplet()
     return triplet;
 }
 
+/************************************************************************/
 double PsoThread::getCost()
 {
     return fg;
 }
 
+/************************************************************************/
 ContactPoints PsoThread::fillContactPoints(yarp::sig::Vector &xi, yarp::sig::Vector &nsi)
 {
     yarp::sig::Vector c1(3),c2(3),c3(3),n1(3),n2(3),n3(3);
@@ -407,6 +417,7 @@ ContactPoints PsoThread::fillContactPoints(yarp::sig::Vector &xi, yarp::sig::Vec
     return triplet;
 }
 
+/************************************************************************/
 double PsoThread::fitness(ContactPoints &triplet)
 {
     double f=0.0;
@@ -470,6 +481,7 @@ double PsoThread::fitness(ContactPoints &triplet)
     return f;
 }
 
+/************************************************************************/
 double PsoThread::penaltyCones(int n_cones, yarp::sig::Vector &idx, yarp::sig::Vector &angles)
 {
     double f=0.0;
@@ -495,11 +507,13 @@ double PsoThread::penaltyCones(int n_cones, yarp::sig::Vector &idx, yarp::sig::V
     return f;
 }
 
+/************************************************************************/
 double PsoThread::triangleArea(yarp::sig::Vector &p1, yarp::sig::Vector &p2, yarp::sig::Vector &p3)
 {
     return norm(cross(p2-p1,p3-p1))/2;
 }
 
+/************************************************************************/
 bool PsoThread::counterOverlap(yarp::sig::Vector &n1, yarp::sig::Vector &n2, double &angle)
 {
     n1=n1/norm(n1);
@@ -518,6 +532,7 @@ bool PsoThread::counterOverlap(yarp::sig::Vector &n1, yarp::sig::Vector &n2, dou
     }
 }
 
+/************************************************************************/
 yarp::sig::Vector PsoThread::assignPoints(const yarp::sig::Vector &ids)
 {
     yarp::sig::Vector res(dimension);
@@ -533,6 +548,7 @@ yarp::sig::Vector PsoThread::assignPoints(const yarp::sig::Vector &ids)
     return res;
 }
 
+/************************************************************************/
 yarp::sig::Vector PsoThread::assignNormals(const yarp::sig::Vector &ids)
 {
     yarp::sig::Vector res(dimension);
@@ -548,6 +564,7 @@ yarp::sig::Vector PsoThread::assignNormals(const yarp::sig::Vector &ids)
     return res;
 }
 
+/************************************************************************/
 int PsoThread::findClosestPoint(pcl::PointXYZ &point)
 {
     int k=1;
@@ -562,6 +579,7 @@ int PsoThread::findClosestPoint(pcl::PointXYZ &point)
     return id;
 }
 
+/************************************************************************/
 yarp::sig::Vector PsoThread::findTriplet(const yarp::sig::Vector &vect)
 {
     pcl::PointXYZ p1(vect[0],vect[1],vect[2]);
@@ -596,6 +614,7 @@ yarp::sig::Vector PsoThread::findTriplet(const yarp::sig::Vector &vect)
     return ids;
 }
 
+/************************************************************************/
 yarp::sig::Vector PsoThread::findDifferentIds(const yarp::sig::Vector &ids)
 {
     yarp::sig::Vector idsNew(3);
@@ -626,16 +645,19 @@ yarp::sig::Vector PsoThread::findDifferentIds(const yarp::sig::Vector &ids)
     return idsNew;
 }
 
+/************************************************************************/
 bool PsoThread::checkDone()
 {
     return done;
 }
 
+/************************************************************************/
 void PsoThread::close()
 {
  
 }
 
+/************************************************************************/
 void PsoThread::threadRelease() 
 {
 
