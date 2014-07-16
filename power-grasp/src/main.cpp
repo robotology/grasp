@@ -25,7 +25,7 @@ on the object where the hand should be placed to obtain a successful power grasp
 This module, given a set of 3D points, returns the best end-effector position and orientation
 that will lead to a successful grasp. It commands directly to the actionsRenderingEngine
 module, which is equipped with a dedicated function called powerGrasp. It usually takes the
-3D point cloud from the 3Dreconstruction module.
+3D point cloud from the object-reconstruction module.
 
 \section rpc_port Commands:
 
@@ -136,7 +136,7 @@ The following are the options that are usually contained
 in the configuration file:
 
 --name \e name
-- specify the module name, which is \e objectReconstr by 
+- specify the module name, which is \e power-grasp by 
   default.
 
 --robot \e robot
@@ -189,12 +189,12 @@ in the configuration file:
 -- h \e h
 - height of the window that depicts the point cloud.
 
--- disable_right \e disable_right
+-- disableRight \e disableRight
 - if the user wants to disable the right arm from the beginning (for instance if the robot has the 
   right arm broken, so the cartesian interface cannot be opened), this parameter should be present
   in the config file. If it is not present, the right arm will not be disabled.
 
--- disable_left \e disable_left
+-- disableLeft \e disableLeft
 - if the user wants to disable the left arm from the beginning (for instance if the robot has the 
   left arm broken, so the cartesian interface cannot be opened), this parameter should be present
   in the config file. If it is not present, the left arm will not be disabled.

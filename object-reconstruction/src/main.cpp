@@ -77,7 +77,7 @@ The following are the options that are usually contained
 in the configuration file:
 
 --name \e name
-- specify the module name, which is \e objectReconstr by 
+- specify the module name, which is \e object-reconstruction by 
   default.
 
 --robot \e robot

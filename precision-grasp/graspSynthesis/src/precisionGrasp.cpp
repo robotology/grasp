@@ -69,11 +69,10 @@ PrecisionGrasp::PrecisionGrasp() : cloud(new pcl::PointCloud<pcl::PointXYZRGB>),
 
 bool PrecisionGrasp::configure(ResourceFinder &rf)
 {
-    neighborsForNormal=rf.check("neighborsForNormal",Value(30)).asInt();
     radiusSearch=rf.check("radiusSearch",Value(0.045)).asDouble();
     handSize=rf.check("limit_finger_max",Value(0.08)).asDouble();
     double limit_finger_min=rf.check("limit_finger_min",Value(0.02)).asDouble();
-    string name=rf.check("name",Value("precisionGrasp")).asString().c_str();
+    string name=rf.check("name",Value("precision-grasp")).asString().c_str();
     string useFile=rf.check("fromFile",Value("false")).asString().c_str();
     path=rf.find("path").asString().c_str();
     sampling=rf.check("sampling",Value(0.01f)).asDouble();
@@ -84,6 +83,12 @@ bool PrecisionGrasp::configure(ResourceFinder &rf)
     int iterations=rf.check("iterations",Value(2000)).asInt();
     double hand_area=rf.check("hand_area",Value(0.00225)).asDouble();
     outputFile=rf.find("outputFile").asString().c_str();
+    posx=rf.check("x",Value(0)).asInt();
+    posy=rf.check("y",Value(0)).asInt();
+    visualizationThread->setPosition(posx, posy);
+    sizex=rf.check("w",Value(320)).asInt();
+    sizey=rf.check("h",Value(240)).asInt();
+    visualizationThread->setSize(sizex, sizey);
     
     if (!openDevices())
         return false;
@@ -152,9 +157,6 @@ bool PrecisionGrasp::configure(ResourceFinder &rf)
         return false;
 
     if (!areCmdPort.open(("/"+name+"/are/cmd:o").c_str()))
-        return false;
-
-    if (!areRpcPort.open(("/"+name+"/are/rpc:o").c_str()))
         return false;
 
     if (fromFile)
@@ -412,6 +414,7 @@ void PrecisionGrasp::fillVectorFromBottle(const yarp::os::Bottle* b, yarp::sig::
 
 bool PrecisionGrasp::interruptModule()
 {
+    eventRpc.signal();
     Bottle &out=toMatlab.prepare();
     out.clear();
     out.addString("quit");
@@ -427,7 +430,6 @@ bool PrecisionGrasp::interruptModule()
     ikPort4l.interrupt();
     depth2kin.interrupt();
     areCmdPort.interrupt();
-    areRpcPort.interrupt();
     reconstructionPort.interrupt();
     meshPort.interrupt();
     rpc.interrupt();
@@ -457,7 +459,6 @@ bool PrecisionGrasp::close()
     ikPort2l.close();
     ikPort3l.close();
     ikPort4l.close();
-    areRpcPort.close();
     areCmdPort.close();
     depth2kin.close();
     reconstructionPort.close();
@@ -873,7 +874,9 @@ bool PrecisionGrasp::updateModule()
             else if ((!psoThreadFitness1->isSuccessful()) && (!psoThreadFitness2->isSuccessful()) && (!psoThreadFitness3->isSuccessful()) && (!psoThreadFitness4->isSuccessful()) && alphaToUse>0.9)
             {
                 done=true;
+                grasped=false;
                 printf("Didn't find any triplet\n");
+                eventRpc.signal();
                 current_state=STATE_WAIT;
                 if (fromFile)
                     fromFileFinished=true;
@@ -896,7 +899,8 @@ bool PrecisionGrasp::updateModule()
     {
         mutex.wait();
         askToGrasp();
-        mutex.post();        
+        mutex.post();
+        eventRpc.signal();
         current_state=STATE_WAIT;
     }
     
@@ -1635,11 +1639,59 @@ bool PrecisionGrasp::respond(const Bottle& command, Bottle& reply)
         }
         else if (tag_1=="filter")
         {
-            if (command.get(2).asString()=="true")
+            if (command.get(2).asString()=="on")
                 filterCloud=true;
             else
                 filterCloud=false;
             reply.addString("ack");
+            return true;
+        }
+        else if (tag_1=="x")
+        {
+            if (command.size()>1)
+            {
+                posx=command.get(1).asInt();
+                visualizationThread->setPosition(posx,posy);
+                reply.addString("ack");
+            }
+            else
+                reply.addString("nack");
+            return true;
+        }
+        else if (tag_1=="y")
+        {
+            if (command.size()>1)
+            {
+                posy=command.get(1).asInt();
+                visualizationThread->setPosition(posx,posy);
+                reply.addString("ack");
+            }
+            else
+                reply.addString("nack");
+            return true;
+        }
+        else if (tag_1=="w")
+        {
+            if (command.size()>1)
+            {
+                sizex=command.get(1).asInt();
+                visualizationThread->setSize(sizex,sizey);
+                reply.addString("ack");
+            }
+            else
+                reply.addString("nack");
+            return true;
+        }
+        else if (tag_1=="h")
+        {
+            if (command.size()>1)
+            {
+                sizey=command.get(1).asInt();
+                visualizationThread->setSize(sizex,sizey);
+                reply.addString("ack");
+            }
+            else
+                reply.addString("nack");
             return true;
         }
         else if (tag_1=="write")
@@ -1667,26 +1719,6 @@ bool PrecisionGrasp::respond(const Bottle& command, Bottle& reply)
             reply.addString("ack");
             return true;
         }
-    }
-    if (tag_0=="stop")
-    {
-        Bottle cmd1;
-        cmd1.addString("interrupt");
-
-        if (areRpcPort.getOutputCount()>0)
-            areRpcPort.write(cmd1,reply);
-
-        readyToGrasp=false;
-
-        cmd1.clear();
-        cmd1.addString("reinstate");
-
-        if (areRpcPort.getOutputCount()>0)
-            areRpcPort.write(cmd1,reply);
-
-        reply.addString("ack");
-        current_state=STATE_WAIT;
-        return true;
     }
     if (tag_0=="IK1" || tag_0=="IK2" || tag_0=="IK3" || tag_0=="IK4")
     {
@@ -1761,10 +1793,31 @@ bool PrecisionGrasp::respond(const Bottle& command, Bottle& reply)
         if (readyToGrasp)
         {
             current_state=STATE_GRASP;
+            eventRpc.reset();
+            eventRpc.wait();
             reply.addString("ack");
         }
         else
             reply.addString("nack");
+        return true;
+    }
+    if (tag_0=="help")
+    {
+        reply.addString("set visualization on/off");
+        reply.addString("set x");
+        reply.addString("set y");
+        reply.addString("set w");
+        reply.addString("set h");
+        reply.addString("set offsetL x y z");
+        reply.addString("set offsetR x y z");
+        reply.addString("set filter on/off");
+        reply.addString("set write on/off");
+        reply.addString("block right/left");
+        reply.addString("unblock right/left");
+        reply.addString("grasp (x y) [wait]");
+        reply.addString("go");
+        reply.addString("dont");
+        reply.addString("isGrasped");
         return true;
     }
     if (tag_0=="block")
@@ -1784,7 +1837,7 @@ bool PrecisionGrasp::respond(const Bottle& command, Bottle& reply)
             return true;
         }
     }
-    if (tag_0=="release")
+    if (tag_0=="unblock")
     {
         if (command.size()>=2)
         {
@@ -1815,54 +1868,30 @@ bool PrecisionGrasp::respond(const Bottle& command, Bottle& reply)
         current_state=STATE_WAIT;
         return true;
     }
-    if (tag_0=="stop")
-    {
-        Bottle cmd1;
-        cmd1.addString("interrupt");
-
-        /*if (areRpcPort.getOutputCount()>0)
-            areRpcPort.write(cmd1,reply);*/
-
-        grasped=false;
-        readyToGrasp=false;
-
-        cmd1.clear();
-        cmd1.addString("reinstate");
-
-        /*if (areRpcPort.getOutputCount()>0)
-            areRpcPort.write(cmd1,reply);*/
-
-        reply.addString("ack");
-        current_state=STATE_WAIT;
-        return true;
-    }
     if (tag_0=="grasp")
     {
-        if (current_state==STATE_ESTIMATE || current_state==STATE_IK)
+        if (current_state==STATE_ESTIMATE || current_state==STATE_IK || current_state==STATE_GRASP)
         {
             reply.addString("nack");
             return true;
         }
 
-        if (!clicked)
-        {
-            reply.addString("Click on the image first");
-            return true;
-        }
-
         if (visualizationThread->isRunning())
             visualizationThread->stop();
-
+                
         readyToGrasp=false;
         grasped=false;
         dont=false;
 
+        Bottle *pos=command.get(1).asList();
+
         Bottle cmd1;
         reply.clear();
-        cmd1.addString("idle");
+        cmd1.addInt(pos->get(0).asInt());
+        cmd1.addInt(pos->get(1).asInt());
 
-        /*if (areCmdPort.getOutputCount()>0)
-            areCmdPort.write(cmd1,reply);*/
+        if (reconstructionPort.getOutputCount()>0)
+            reconstructionPort.write(cmd1,reply);
 
         Bottle cmd2;
         reply.clear();
@@ -1875,41 +1904,23 @@ bool PrecisionGrasp::respond(const Bottle& command, Bottle& reply)
         {
             reply.clear();
             current_state=STATE_ESTIMATE;
+            straight=true;
             if (command.size()>=2)
-                straight=(command.get(1).asString()=="straight");
-            reply.addString("ack");
+                straight=(command.get(2).asString()!="wait");
+            if (straight)
+            {
+                eventRpc.reset();
+                eventRpc.wait();
+            }
+            if (grasped)
+                reply.addString("ack");
+            else
+                reply.addString("nack");
         }
         else
             reply.addString("nack");
                 
         return true;
-    }
-    if (command.size()==2)
-    {
-        if (command.get(0).asInt()!=0 && command.get(1).asInt()!=0)
-        {
-            Bottle cmd1;
-            reply.clear();
-            cmd1.addInt(command.get(0).asInt());
-            cmd1.addInt(command.get(1).asInt());
-
-            if (reconstructionPort.getOutputCount()>0)
-                reconstructionPort.write(cmd1,reply);
-
-            clicked=true;
-
-            if ((reply.size()>0) && (reply.get(0).asString()=="ack"))
-            {
-                reply.clear();
-                reply.addString("ack");
-            }
-            else
-            {
-                reply.clear();
-                reply.addString("nack");
-            }
-            return true;
-        }
     }
     reply.addString("nack");
     return true;

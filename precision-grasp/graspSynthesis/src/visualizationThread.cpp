@@ -23,16 +23,36 @@ using namespace yarp::os;
 using namespace yarp::sig;
 using namespace iCub::data3D;
 
+/************************************************************************/
 VisualizationThread::VisualizationThread(DataToShow &_data) : data(_data)
 {
     running=false;
 }
 
+/************************************************************************/
+void VisualizationThread::setPosition(int x, int y)
+{
+    this->x=x;
+    this->y=y;
+}
+
+/************************************************************************/
+void VisualizationThread::setSize(int sizex, int sizey)
+{
+    this->sizex=sizex;
+    this->sizey=sizey;
+}
+
+/************************************************************************/
 void VisualizationThread::run() 
 {
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
     int scale=15;
-    viewer->initCameraParameters(); 
+    viewer->initCameraParameters();
+
+    viewer->setPosition(x,y);
+    if (sizex!=0 && sizey!=0)
+        viewer->setSize(sizex,sizey);
 
     BoundingBox bb(data.boundingBox.getBoundingBox());
     bb.drawBoundingBox(viewer);
@@ -66,6 +86,7 @@ void VisualizationThread::run()
     }
 }
 
+/************************************************************************/
 void VisualizationThread::onStop()
 {
     running=false;

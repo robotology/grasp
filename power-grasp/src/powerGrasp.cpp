@@ -164,7 +164,7 @@ bool PowerGrasp::configure(ResourceFinder &rf)
 {
     configureGeneralInfo(rf);
 
-    string name=rf.check("name",Value("powerGrasp")).asString().c_str();
+    string name=rf.check("name",Value("power-grasp")).asString().c_str();
 
     int nAngles=rf.check("nAngles",Value(50)).asInt();
     string robot=rf.check("robot",Value("icub")).asString().c_str();
@@ -1145,7 +1145,6 @@ bool PowerGrasp::respond(const Bottle& command, Bottle& reply)
         reply.addString("dont");
         reply.addString("isGrasped");
         return true;
-
     }
     else if (tag_0=="go")
     {

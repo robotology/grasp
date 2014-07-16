@@ -1,6 +1,3 @@
-#include <string>
-#include <stdio.h>
-#include <stdlib.h>
 /* Copyright: (C) 2014 iCub Facility - Istituto Italiano di Tecnologia
  * Authors: Ilaria Gori
  * email:   ilaria.gori@iit.it
@@ -20,6 +17,9 @@
 #ifndef __PRECISION_GRASP_H__
 #define __PRECISION_GRASP_H__
 
+#include <string>
+#include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -34,6 +34,7 @@
 #include <yarp/os/Time.h>
 #include <yarp/os/Random.h>
 #include <yarp/os/Semaphore.h>
+#include <yarp/os/Event.h>
 #include <yarp/dev/CartesianControl.h>
 #include <yarp/dev/ControlBoardInterfaces.h>
 #include <yarp/dev/PolyDriver.h>
@@ -67,7 +68,6 @@ class PrecisionGrasp: public yarp::os::RFModule
 {
 private:
     int current_state;
-    int neighborsForNormal;
     int nFile;
     int counter;
     int winner_triplet;
@@ -82,6 +82,10 @@ private:
     int ov_cones3;
     int ov_cones4;
     int winner_ov_cones;
+    int posx;
+    int posy;
+    int sizex;
+    int sizey;
     bool clicked;
     bool fromFile;
     bool fromFileFinished;
@@ -171,7 +175,6 @@ private:
     yarp::os::Port ikPort2l;
     yarp::os::Port ikPort3l;
     yarp::os::Port ikPort4l;
-    yarp::os::Port areRpcPort;
     yarp::os::Port areCmdPort;
     yarp::os::Port depth2kin;
     yarp::os::BufferedPort<iCub::data3D::SurfaceMeshWithBoundingBox> meshPort;
@@ -180,6 +183,7 @@ private:
 
     yarp::os::Semaphore mutex;
     yarp::os::Semaphore mutex_to_write;
+    yarp::os::Event eventRpc;
 
     iCub::data3D::BoundingBox boundingBox;
 

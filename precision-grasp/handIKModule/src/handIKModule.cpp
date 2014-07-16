@@ -316,7 +316,7 @@ bool HandIKModule::respond(const Bottle& command, Bottle& reply)
     tag=command.get(0).asString();
     if (tag=="IK1" || tag=="IK2" || tag=="IK3" || tag=="IK4")
     {
-        Network::connect(portName.c_str(),"/precisionGrasp/rpc");
+        Network::connect(portName.c_str(),"/precision-grasp/rpc");
         contacts_r.clear();
         normals_r.clear();
         contacts_o.clear();

@@ -40,7 +40,10 @@ class VisualizationThread : public yarp::os::Thread
 private:
     DataToShow &data;
     bool running;
-    bool fromFile;
+    int x;
+    int y;
+    int sizex;
+    int sizey;
 
 public:
 
@@ -48,7 +51,9 @@ public:
     ~VisualizationThread() {};
 
     void onStop();
-    void run(); 
+    void run();
+    void setPosition(int x,int y);
+    void setSize(int sizex, int sizey);
 };
 
 #endif
