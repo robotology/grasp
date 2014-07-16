@@ -163,7 +163,7 @@ void OrientationThread::getAngles(yarp::sig::Vector &angles, int nAngles)
 {
     angles.resize(nAngles);
     double factor=360.0/nAngles;
-    double tmp=0;
+    double tmp=0.0;
     for (int i=0; i<nAngles; i++)
     {
         angles[i]=tmp;

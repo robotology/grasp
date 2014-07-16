@@ -147,13 +147,13 @@ private:
     void fromSurfaceMesh(const iCub::data3D::SurfaceMeshWithBoundingBox& msg);
     void askToGrasp();
     void resetBools();
-    void manageModality(int &current_modality);
+    void manageModality();
     void chooseCandidatePoints();
-    void rankPoints(const int currentModality);
+    void rankPoints();
     void startVisualization();
     void computeDim();
     int findIndexFromCloud(const yarp::sig::Vector &point);
-    double scoreFunction(const int index, const int current_modality);
+    double scoreFunction(const int index);
     bool normalPointingOut(const int index, const yarp::sig::Vector &center);
     bool respond(const yarp::os::Bottle& command, yarp::os::Bottle& reply);
     bool fillCloudFromFile();

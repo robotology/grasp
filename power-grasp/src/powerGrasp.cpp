@@ -427,7 +427,7 @@ void PowerGrasp::normalEstimation()
 }
 
 /************************************************************************/
-void PowerGrasp::rankPoints(const int currentModality)
+void PowerGrasp::rankPoints()
 {              
     pcl::KdTreeFLANN<pcl::PointXYZ> kdtree;
     kdtree.setInputCloud (cloudxyz);
@@ -455,7 +455,7 @@ void PowerGrasp::rankPoints(const int currentModality)
                 if (normalPointingOut(index,center))
                 {
                     nGoodPoints++;
-                    double score=scoreFunction(index,currentModality);
+                    double score=scoreFunction(index);
                     insertElement(score,index);
                 }
             }
@@ -511,9 +511,9 @@ void PowerGrasp::chooseCandidatePoints()
     currentModality=modality;
 
     if (currentModality==MODALITY_AUTO)   
-        manageModality(currentModality);
+        manageModality();
 
-    rankPoints(currentModality);
+    rankPoints();
             
     string smodality;
     if (currentModality==MODALITY_CENTER)
@@ -741,7 +741,7 @@ yarp::sig::Vector PowerGrasp::assignIndexToAxes(double &anglez)
 }
 
 /************************************************************************/
-void PowerGrasp::manageModality(int &currentModality)
+void PowerGrasp::manageModality()
 {
     yarp::sig::Vector center=boundingBox.getCenter();
     yarp::sig::Vector dim=boundingBox.getDim();
@@ -1516,7 +1516,7 @@ double PowerGrasp::getPeriod()
 }
 
 /************************************************************************/
-double PowerGrasp::scoreFunction(const int index, const int currModality)
+double PowerGrasp::scoreFunction(const int index)
 {
     double score=0.0;
     
@@ -1570,14 +1570,14 @@ double PowerGrasp::scoreFunction(const int index, const int currModality)
     else
         score+=exp(-(fabs(curvature-currentCurvature)/maxCurvature))/2;
 
-    if (currModality==MODALITY_TOP)
+    if (currentModality==MODALITY_TOP)
     {
         if (point[2]-center[2]>0.0)
             return score+fabs(point[2]-center[2])/dimz;
         else
             return score;
     }
-    else if (currModality==MODALITY_RIGHT)
+    else if (currentModality==MODALITY_RIGHT)
     {
         if (point[1]-center[1]>0.0)
         {
@@ -1588,7 +1588,7 @@ double PowerGrasp::scoreFunction(const int index, const int currModality)
         else
             return score;
     }
-    else if (currModality==MODALITY_LEFT)
+    else if (currentModality==MODALITY_LEFT)
     {
         if (point[1]-center[1]<0.0)
         {
