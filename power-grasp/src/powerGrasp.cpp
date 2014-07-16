@@ -888,6 +888,11 @@ void PowerGrasp::askToGrasp()
         printf("dbg: chosen point %s\n", chosenPoint.toString().c_str());
     }
 
+    if (chosenHand=="left")
+        chosenPoint+=offsetL;
+    if (chosenHand=="right")
+        chosenPoint+=offsetR;
+
     cmd.addString("grasp");
     Bottle &point=cmd.addList();
     point.addDouble(chosenPoint[0]);
