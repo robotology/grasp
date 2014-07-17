@@ -206,12 +206,12 @@ void OrientationThread::run()
 
             if (hand=="right_arm")
             {
-                if (orientation(0,0)>0.1 || orientation(2,1)>0.5 || orientation(2,0)<-0.1)
+                if (orientation(0,0)>0.1 || orientation(2,1)>0.5 || orientation(2,0)<-0.1 || orientation(2,0)>0.9)
                     continue;
             }
             else
             {
-                if (orientation(0,0)>0.1 || orientation(2,1)>0.5 || orientation(2,0)<-0.1)
+                if (orientation(0,0)>0.1 || orientation(2,1)>0.5 || orientation(2,0)<-0.1 || orientation(2,0)>0.9)
                     continue;
             }
 
@@ -235,10 +235,9 @@ void OrientationThread::run()
             q=q*M_PI/180.0;
             arm->setAng(q);
 
-            yarp::sig::Vector tmp=arm->EndEffPose(true);
             yarp::sig::Vector ee(6);
-            ee[0]=tmp[0]; ee[1]=tmp[1]; ee[2]=tmp[2];
-            ee[3]=tmp[3]*tmp[6]; ee[4]=tmp[4]*tmp[6]; ee[5]=tmp[5]*tmp[6];
+            ee[0]=eePos[0]; ee[1]=eePos[1]; ee[2]=eePos[2];
+            ee[3]=od[0]*od[3]; ee[4]=od[1]*od[3]; ee[5]=od[2]*od[3];
 
             yarp::sig::Vector eehat(6);
             eehat[0]=xdhat[0]; eehat[1]=xdhat[1]; eehat[2]=xdhat[2];
