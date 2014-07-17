@@ -1364,13 +1364,13 @@ string PowerGrasp::chooseBestPointAndOrientation(int &winnerIndex, yarp::sig::Ma
     if (!rightDisabled)
     {
         orientationThreadRight->reset();
-        if (areCmdPort.getOutputCount()==0)
+        //if (areCmdPort.getOutputCount()==0)
             orientationThreadRight->preAskForPose();
     }
     if (!leftDisabled)
     {
         orientationThreadLeft->reset();
-        if (areCmdPort.getOutputCount()==0)
+        //if (areCmdPort.getOutputCount()==0)
             orientationThreadLeft->preAskForPose();
     }
     for (int i=0; i<rankScores.size(); i++)
@@ -1456,13 +1456,13 @@ string PowerGrasp::chooseBestPointAndOrientation(int &winnerIndex, yarp::sig::Ma
     bool noResultL=true;
     if (!rightBlocked && !blockRightTmp && !rightDisabled)
     {
-        if (areCmdPort.getOutputCount()==0)
+        //if (areCmdPort.getOutputCount()==0)
             orientationThreadRight->postAskForPose();
         noResultR=orientationThreadRight->getResult();
     }
     if (!leftBlocked && !blockLeftTmp && !leftDisabled)
     {
-        if (areCmdPort.getOutputCount()==0)
+        //if (areCmdPort.getOutputCount()==0)
             orientationThreadLeft->postAskForPose();
         noResultL=orientationThreadLeft->getResult();
     }

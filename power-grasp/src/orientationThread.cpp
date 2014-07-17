@@ -126,9 +126,7 @@ void OrientationThread::preAskForPose()
     newDof[0]=1.0;
     newDof[2]=1.0;
     
-    iCtrl->setDOF(newDof,dof);  
-    iCtrl->setLimits(7,-70.0,70.0);
-    iCtrl->setTrajTime(1.5);
+    iCtrl->setDOF(newDof,dof);
 }
 
 /************************************************************************/
@@ -180,8 +178,6 @@ void OrientationThread::run()
 
     if (work)
     {
-        bool firstAngle=true;
-
         orientation(0,3)=center[0];
         orientation(1,3)=center[1];
         orientation(2,3)=center[2];
@@ -221,33 +217,26 @@ void OrientationThread::run()
             q=0.0;       
             manip=0.0;
 
-            if (firstAngle)
-            {
-                iCtrl->askForPose(eePos,od,xdhat,odhat,q);
-                firstAngle=false;
-                q0=q;
-            }
-            else
-            {
-                iCtrl->askForPose(q0,eePos,od,xdhat,odhat,q);
-            }
+            iCtrl->askForPose(eePos,od,xdhat,odhat,q);
 
             q=q*M_PI/180.0;
             arm->setAng(q);
 
-            yarp::sig::Vector ee(6);
-            ee[0]=eePos[0]; ee[1]=eePos[1]; ee[2]=eePos[2];
-            ee[3]=od[0]*od[3]; ee[4]=od[1]*od[3]; ee[5]=od[2]*od[3];
 
-            yarp::sig::Vector eehat(6);
-            eehat[0]=xdhat[0]; eehat[1]=xdhat[1]; eehat[2]=xdhat[2];
-            eehat[3]=odhat[0]*odhat[3]; eehat[4]=odhat[1]*odhat[3]; eehat[5]=odhat[2]*odhat[3];
+            od[0]=od[0]*od[3];
+            od[1]=od[1]*od[3];
+            od[2]=od[2]*od[3];
+            od.pop_back();
 
-            double distance=norm(ee-eehat);
-            double tolerance=0.0;
-            iCtrl->getInTargetTol(&tolerance);
-            
-            if (distance>tolerance)
+            odhat[0]=odhat[0]*odhat[3];
+            odhat[1]=odhat[1]*odhat[3];
+            odhat[2]=odhat[2]*odhat[3];
+            odhat.pop_back();
+
+            double xdist=norm(eePos-xdhat);
+            double odist=norm(od-odhat);
+
+            if (xdist>0.01 && odist>0.1)
                 continue;
             
             Jacobian=arm->GeoJacobian();
