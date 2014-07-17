@@ -19,7 +19,11 @@
 \defgroup handIKModule handIKModule
 
 A module that, given three 3D points and their normals, find the configuration of the
-hand to make thumb, index and middle reach those three points. 
+hand to make thumb, index and middle reach those three points. For further information:
+
+I.Gori, U. Pattacini, V. Tikhanoff, G. Metta
+Three-Finger Precision Grasp on Incomplete 3D Point Clouds.
+In Proceedings of IEEE International Conference on Robotics and Automation (ICRA), 2014.
 
 \section intro_sec Description 
 This module, given triplet of 3D points, returns the configuration of the hand in terms

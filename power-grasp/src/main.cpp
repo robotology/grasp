@@ -19,7 +19,12 @@
 \defgroup power-grasp power-grasp
 
 A module that, given a 3D point cloud representing an object, finds the best position
-on the object where the hand should be placed to obtain a successful power grasp. 
+on the object where the hand should be placed to obtain a successful power grasp. For
+further information:
+
+I.Gori, U. Pattacini, V. Tikhanoff, G. Metta
+Ranking the Good Points: A Comprehensive Method for Humanoid Robots to Grasp Unknown Objects
+In Proceedings of IEEE International Conference on Advanced Robotics (ICAR), 2013.
 
 \section intro_sec Description 
 This module, given a set of 3D points, returns the best end-effector position and orientation

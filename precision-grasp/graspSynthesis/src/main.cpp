@@ -19,7 +19,11 @@
 \defgroup precision-grasp precision-grasp
 
 A module that, given a 3D point cloud representing an object, finds the best triplet to perform
-a three-finger precision grasp successfully. 
+a three-finger precision grasp successfully. For further information:
+
+I.Gori, U. Pattacini, V. Tikhanoff, G. Metta
+Three-Finger Precision Grasp on Incomplete 3D Point Clouds.
+In Proceedings of IEEE International Conference on Robotics and Automation (ICRA), 2014.
 
 \section intro_sec Description 
 This module, given a set of 3D points, returns the best triplet of 3D points on the basis of
