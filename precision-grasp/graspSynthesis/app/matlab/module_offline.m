@@ -16,5 +16,6 @@ rotmat=[0.408406 -0.875513 -0.258228;
 0.898768 0.435114 -0.0537742];
 hand='r';
 
-drawResults(joints, ee, axisangle, center, dim, c1, c2, c3, n1, n2, n3, rotmat, hand, xdhat, odhat, cloud);
+cloud=0;
+drawResults(joints, ee, axisangle, center, c1, c2, c3, n1, n2, n3, hand, xdhat, odhat, cloud);
  

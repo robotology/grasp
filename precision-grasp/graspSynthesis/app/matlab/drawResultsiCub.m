@@ -1,4 +1,4 @@
-function drawResultsiCub(hand, x, xo, contactPoints, normals)
+function drawResultsiCub(hand, x, xo, contactPoints, normals, imgpath)
 
     x1=contactPoints(:,1);
     x2=contactPoints(:,2);
@@ -23,7 +23,13 @@ function drawResultsiCub(hand, x, xo, contactPoints, normals)
     hold on;
     plot3(xo(1),xo(2),xo(3),'og');
     
-    drawHandiCub(x,hand);
+    %drawHandiCub(x,hand);
+    drawHandiCubCAD(x,hand);
+    
     axis equal;
-    grid on;    
+    grid on;
+    
+    if (~isempty(imgpath))
+        saveas(img,imgpath,'fig');    
+    end
 end

@@ -19,6 +19,13 @@ function drawHandiCub(x,hand,varargin)
     ee=rotmat2*rotmat*[0 0 0 1]';
     hold on;
     plot3(ee(1),ee(2),ee(3),'*y','LineWidth',8.0);
+  
+    rotmat3=rotmat2*rotmat;
+   
+    scale=100;
+    quiver3(ee(1),ee(2),ee(3),rotmat3(1,1)/scale,rotmat3(2,1)/scale,rotmat3(3,1)/scale, 'r:', 'LineWidth', 2);
+    quiver3(ee(1),ee(2),ee(3),rotmat3(1,2)/scale,rotmat3(2,2)/scale,rotmat3(3,2)/scale, 'g:', 'LineWidth', 2);
+    quiver3(ee(1),ee(2),ee(3),rotmat3(1,3)/scale,rotmat3(2,3)/scale,rotmat3(3,3)/scale, 'b:', 'LineWidth', 2);
     
     pos1link1=fkiCub(1,hand,x(1:3)',0,rotmat2*rotmat,1);
     pos2link1=fkiCub(2,hand,x(4:6)',0,rotmat2*rotmat,0);

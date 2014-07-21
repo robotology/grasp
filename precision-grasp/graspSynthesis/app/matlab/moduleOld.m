@@ -33,10 +33,10 @@ while(~done)
             disp (counter-1);
             disp ('sequences');
             for j=1:counter-1
-                drawResults(joints(j,:), ee(j,:), axisangle(j,:), center, dim, c1(j,:), c2(j,:), c3(j,:), n1(j,:), n2(j,:), n3(j,:), rotmat, hand(j,:), cloud);
+                drawResults(joints(j,:), ee(j,:), axisangle(j,:), center, c1(j,:), c2(j,:), c3(j,:), n1(j,:), n2(j,:), n3(j,:), hand(j,:), cloud);
             end
             
-            drawResults(best_joints, best_ee, best_axisangle, center, dim, best_c1, best_c2, best_c3, best_n1, best_n2, best_n3, rotmat, best_hand, cloud);
+            drawResults(best_joints, best_ee, best_axisangle, center, best_c1, best_c2, best_c3, best_n1, best_n2, best_n3, best_hand, cloud);
             
             counter = 1;
             clear joints ee axisangle center dim c1 c2 c3 n1 n2 n3 rotmat hand cloud;

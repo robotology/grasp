@@ -120,7 +120,7 @@ while(~done)
             end
             cloud = vec2mat(cloudVec,6);
             
-            drawResults(best_joints, best_ee, best_axisangle, center, dim, best_c1, best_c2, best_c3, best_n1, best_n2, best_n3, rotmat, best_hand, best_xdhat, best_odhat, cloud);
+            drawResults(best_joints, best_ee, best_axisangle, center, best_c1, best_c2, best_c3, best_n1, best_n2, best_n3, best_hand, best_xdhat, best_odhat, cloud);
 			disp(tmp.toString);
 		end
     else
