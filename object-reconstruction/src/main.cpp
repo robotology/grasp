@@ -84,6 +84,10 @@ in the configuration file:
 - specify the robot that has to be used. It is icub by 
   default.
 
+-- computeBB \e computeBB
+- tells if the algorithm has also to compute the minimum enclosing bounding box. It can 
+  be on or off.
+
 \section tested_os_sec Tested OS
 Windows, Linux
 

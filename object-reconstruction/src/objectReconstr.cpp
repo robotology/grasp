@@ -37,7 +37,8 @@ bool ObjectReconstr::configure(ResourceFinder &rf)
     string name=rf.check("name",Value("objectReconstr")).asString().c_str();
     setName(name.c_str());
     outputDir=rf.getHomeContextPath().c_str();
-    computeBB=true;
+    string boundBox=rf.check("computeBB",Value("on")).asString().c_str();
+    computeBB=boundBox=="on";
 
     middlex=-1;
     middley=-1;
