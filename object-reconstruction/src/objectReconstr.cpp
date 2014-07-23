@@ -50,8 +50,16 @@ bool ObjectReconstr::configure(ResourceFinder &rf)
     imagePortInRight.open(imR.c_str());
 
     bool ok=true;
-    ok&=Network::connect((slash+robot+"/camcalib/left/out").c_str(),imL.c_str());
-    ok&=Network::connect((slash+robot+"/camcalib/right/out").c_str(),imR.c_str());
+    if (robot=="icub")
+    {
+        ok&=Network::connect((slash+robot+"/camcalib/left/out").c_str(),imL.c_str());
+        ok&=Network::connect((slash+robot+"/camcalib/right/out").c_str(),imR.c_str());
+    }
+    else
+    {
+        ok&=Network::connect((slash+robot+"/cam/left").c_str(),imL.c_str());
+        ok&=Network::connect((slash+robot+"/cam/right").c_str(),imR.c_str());
+    }
 
     if (!ok)
     {
