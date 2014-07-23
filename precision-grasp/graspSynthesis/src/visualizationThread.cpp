@@ -70,8 +70,8 @@ void VisualizationThread::run()
         pcl::PointXYZ point(data.sampled_cloud.at(i).x,data.sampled_cloud.at(i).y, data.sampled_cloud.at(i).z);
         viewer->addSphere (point, 0.002, 0, 1, 0, "pointScored"+s);
     }
-    viewer->addCoordinateSystem(0.1);
     viewer->resetCamera();
+    viewer->setCameraPosition(-0.0611749,-0.040113,0.00667606,-0.105521,0.0891437,0.990413);
     running=true;
 
     while (!viewer->wasStopped())

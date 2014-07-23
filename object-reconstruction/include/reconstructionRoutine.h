@@ -25,7 +25,6 @@
 #include <pcl/filters/statistical_outlier_removal.h>
 #include <pcl/filters/voxel_grid.h>
 #include <iCub/stereoVision/disparityThread.h>
-#include <iCub/segmentation/SegmentationModuleInterface.h>
 
 class ReconstructionRoutine
 {

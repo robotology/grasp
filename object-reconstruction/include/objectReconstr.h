@@ -22,7 +22,6 @@
 #include <yarp/os/RFModule.h>
 #include <iCub/data3D/SurfaceMeshWithBoundingBox.h>
 #include <iCub/data3D/minBoundBox.h>
-#include <iCub/segmentation/SegmentationModuleInterface.h>
 #include <reconstructionRoutine.h>
 
 #define ACK                     VOCAB3('a','c','k')

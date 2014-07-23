@@ -98,6 +98,8 @@ private:
     bool leftBlocked;
     bool filterCloud;
     bool writeCloud;
+    bool rightDisabled;
+    bool leftDisabled;
     double handSize;
     double radiusSearch;
     double sampling;

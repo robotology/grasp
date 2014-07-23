@@ -41,10 +41,12 @@ PrecisionGrasp::PrecisionGrasp() : cloud(new pcl::PointCloud<pcl::PointXYZRGB>),
     straight=false;
     rightBlocked=false;
     leftBlocked=false;
+    rightDisabled=false;
+    leftDisabled=false;
     fromFileFinished=false;
     filterCloud=true;
     clicked=false;
-    writeCloud=true;
+    writeCloud=false;
     nFile=0;
     counter=0;
     bestCost=1e20;
@@ -87,6 +89,11 @@ bool PrecisionGrasp::configure(ResourceFinder &rf)
     sizex=rf.check("w",Value(320)).asInt();
     sizey=rf.check("h",Value(240)).asInt();
     visualizationThread->setSize(sizex, sizey);
+
+    if (rf.check("disableRight"))
+        rightDisabled=true;
+    if (rf.check("disableLeft"))
+        leftDisabled=true;     
     
     if (!openDevices())
         return false;
@@ -159,14 +166,20 @@ bool PrecisionGrasp::configure(ResourceFinder &rf)
 
     if (fromFile)
     {
-        Network::connect(ikPort1r.getName().c_str(), "/handIKModule1/right/rpc");
-        Network::connect(ikPort1l.getName().c_str(), "/handIKModule1/left/rpc");
-        Network::connect(ikPort2r.getName().c_str(), "/handIKModule2/right/rpc");
-        Network::connect(ikPort2l.getName().c_str(), "/handIKModule2/left/rpc");
-        Network::connect(ikPort3r.getName().c_str(), "/handIKModule3/right/rpc");
-        Network::connect(ikPort3l.getName().c_str(), "/handIKModule3/left/rpc");
-        Network::connect(ikPort4r.getName().c_str(), "/handIKModule4/right/rpc");
-        Network::connect(ikPort4l.getName().c_str(), "/handIKModule4/left/rpc");
+        if (!rightDisabled)
+        {
+            Network::connect(ikPort1r.getName().c_str(), "/handIKModule1/right/rpc");
+            Network::connect(ikPort2r.getName().c_str(), "/handIKModule2/right/rpc");
+            Network::connect(ikPort3r.getName().c_str(), "/handIKModule3/right/rpc");
+            Network::connect(ikPort4r.getName().c_str(), "/handIKModule4/right/rpc");
+        }
+        if (!leftDisabled)
+        {
+            Network::connect(ikPort1l.getName().c_str(), "/handIKModule1/left/rpc");
+            Network::connect(ikPort2l.getName().c_str(), "/handIKModule2/left/rpc");
+            Network::connect(ikPort3l.getName().c_str(), "/handIKModule3/left/rpc");
+            Network::connect(ikPort4l.getName().c_str(), "/handIKModule4/left/rpc");
+        }
     }
 
     return true;
@@ -175,64 +188,8 @@ bool PrecisionGrasp::configure(ResourceFinder &rf)
 /************************************************************************/
 bool PrecisionGrasp::openDevices()
 {
-    Property optCtrlRight;
-    optCtrlRight.put("device","cartesiancontrollerclient");
-    optCtrlRight.put("remote",("/"+robot+"/cartesianController/right_arm").c_str());
-    optCtrlRight.put("local","/orientation/right/cartesianRight");
-
-    if (!dCtrlRight.open(optCtrlRight))
-    {
-        fprintf(stdout, "Right Cartesian Interface is not open\n");
-        return false;
-    }
-
-    dCtrlRight.view(iCtrlRight);
-    iCtrlRight->storeContext(&context_in_right);
-    yarp::sig::Vector dof;
-    iCtrlRight->getDOF(dof);
-    yarp::sig::Vector newDof=dof;
-    newDof[0]=1.0;
-    newDof[2]=1.0;
-
-    iCtrlRight->setDOF(newDof,dof);
-    iCtrlRight->storeContext(&context_right);
-    iCtrlRight->restoreContext(context_in_right);
-
-    Property optCtrlLeft;
-    optCtrlLeft.put("device","cartesiancontrollerclient");
-    optCtrlLeft.put("remote",("/"+robot+"/cartesianController/left_arm").c_str());
-    optCtrlLeft.put("local","/orientation/left/cartesianLeft");
-
-    if (!dCtrlLeft.open(optCtrlLeft))
-    {
-        fprintf(stdout, "Left Cartesian Interface is not open\n");
-        return false;
-    }
-
-    dCtrlLeft.view(iCtrlLeft);
-    iCtrlLeft->storeContext(&context_in_left);
-    dof.clear();
-    iCtrlLeft->getDOF(dof);
-    newDof=dof;
-    newDof[0]=1.0;
-    newDof[2]=1.0;
-
-    iCtrlLeft->setDOF(newDof,dof);
-    iCtrlLeft->storeContext(&context_left);
-    iCtrlLeft->restoreContext(context_in_left);
-
     Property optArmRight,optArmLeft;
     Property optTorso;
-
-    string remoteArmNameRight="/"+robot+"/right_arm";
-    optArmRight.put("device", "remote_controlboard");
-    optArmRight.put("remote",remoteArmNameRight.c_str());
-    optArmRight.put("local","/localArm/right");
-
-    string remoteArmNameLeft="/"+robot+"/left_arm";
-    optArmLeft.put("device", "remote_controlboard");
-    optArmLeft.put("remote",remoteArmNameLeft.c_str());
-    optArmLeft.put("local","/localArm/left");
 
     string remoteTorsoName="/"+robot+"/torso";
     optTorso.put("device", "remote_controlboard");
@@ -240,65 +197,144 @@ bool PrecisionGrasp::openDevices()
     optTorso.put("local","/localTorso");
 
     robotTorso.open(optTorso);
-    robotArmRight.open(optArmRight);
-    robotArmLeft.open(optArmLeft);
 
-    if (!robotTorso.isValid() || !robotArmRight.isValid() || !robotArmLeft.isValid())
+    if (!robotTorso.isValid())
     {
-        fprintf(stdout, "Device not available\n");
+        printf("Torso not available\n");
         return false;
     }
 
-    robotArmRight.view(limArmRight);
-    robotArmRight.view(posRight);
-    robotArmRight.view(encRight);
-    robotArmLeft.view(limArmLeft);
-    robotArmLeft.view(posLeft);
-    robotArmLeft.view(encLeft);
     robotTorso.view(limTorso);
 
-    armRight=new iCubArm("right");
-    armLeft=new iCubArm("left");
-
-    chainRight=armRight->asChain();
-    chainLeft=armLeft->asChain();
-
-    chainRight->releaseLink(0);
-    chainRight->releaseLink(1);
-    chainRight->releaseLink(2);
-
-    chainLeft->releaseLink(0);
-    chainLeft->releaseLink(1);
-    chainLeft->releaseLink(2);
-
-    deque<IControlLimits*> limRight;
-    limRight.push_back(limTorso);
-    limRight.push_back(limArmRight);
-    armRight->alignJointsBounds(limRight);
-
-    armRight->setAllConstraints(false);
-
-    deque<IControlLimits*> limLeft;
-    limLeft.push_back(limTorso);
-    limLeft.push_back(limArmLeft);
-    armLeft->alignJointsBounds(limLeft);
-
-    armLeft->setAllConstraints(false);
-
-    thetaMinRight.resize(10,0.0);
-    thetaMaxRight.resize(10,0.0);
-    for (unsigned int i=0; i< chainRight->getDOF(); i++)
+    if (!rightDisabled)
     {
-       thetaMinRight[i]=(*chainRight)(i).getMin();
-       thetaMaxRight[i]=(*chainRight)(i).getMax();
+        Property optCtrlRight;
+        optCtrlRight.put("device","cartesiancontrollerclient");
+        optCtrlRight.put("remote",("/"+robot+"/cartesianController/right_arm").c_str());
+        optCtrlRight.put("local","/orientation/right/cartesianRight");
+
+        if (!dCtrlRight.open(optCtrlRight))
+        {
+            fprintf(stdout, "Right Cartesian Interface is not open\n");
+            return false;
+        }
+
+        dCtrlRight.view(iCtrlRight);
+        iCtrlRight->storeContext(&context_in_right);
+        yarp::sig::Vector dof;
+        iCtrlRight->getDOF(dof);
+        yarp::sig::Vector newDof=dof;
+        newDof[0]=1.0;
+        newDof[2]=1.0;
+
+        iCtrlRight->setDOF(newDof,dof);
+        iCtrlRight->storeContext(&context_right);
+        iCtrlRight->restoreContext(context_in_right);
+
+        string remoteArmNameRight="/"+robot+"/right_arm";
+        optArmRight.put("device", "remote_controlboard");
+        optArmRight.put("remote",remoteArmNameRight.c_str());
+        optArmRight.put("local","/localArm/right");
+
+        robotArmRight.open(optArmRight);
+
+        if (!robotArmRight.isValid())
+        {
+            printf("Right arm not available\n");
+            return false;
+        }
+
+        robotArmRight.view(limArmRight);
+        robotArmRight.view(posRight);
+        robotArmRight.view(encRight);
+
+        armRight=new iCubArm("right");
+        chainRight=armRight->asChain();
+
+        chainRight->releaseLink(0);
+        chainRight->releaseLink(1);
+        chainRight->releaseLink(2);
+
+        deque<IControlLimits*> limRight;
+        limRight.push_back(limTorso);
+        limRight.push_back(limArmRight);
+        armRight->alignJointsBounds(limRight);
+
+        armRight->setAllConstraints(false);
+
+        thetaMinRight.resize(10,0.0);
+        thetaMaxRight.resize(10,0.0);
+        for (unsigned int i=0; i< chainRight->getDOF(); i++)
+        {
+           thetaMinRight[i]=(*chainRight)(i).getMin();
+           thetaMaxRight[i]=(*chainRight)(i).getMax();
+        }
     }
 
-    thetaMinLeft.resize(10,0.0);
-    thetaMaxLeft.resize(10,0.0);
-    for (unsigned int i=0; i< chainLeft->getDOF(); i++)
+    if (!leftDisabled)
     {
-       thetaMinLeft[i]=(*chainLeft)(i).getMin();
-       thetaMaxLeft[i]=(*chainLeft)(i).getMax();
+        Property optCtrlLeft;
+        optCtrlLeft.put("device","cartesiancontrollerclient");
+        optCtrlLeft.put("remote",("/"+robot+"/cartesianController/left_arm").c_str());
+        optCtrlLeft.put("local","/orientation/left/cartesianLeft");
+
+        if (!dCtrlLeft.open(optCtrlLeft))
+        {
+            fprintf(stdout, "Left Cartesian Interface is not open\n");
+            return false;
+        }
+
+        dCtrlLeft.view(iCtrlLeft);
+        iCtrlLeft->storeContext(&context_in_left);
+        yarp::sig::Vector dof;
+        yarp::sig::Vector newDof;
+        iCtrlLeft->getDOF(dof);
+        newDof=dof;
+        newDof[0]=1.0;
+        newDof[2]=1.0;
+
+        iCtrlLeft->setDOF(newDof,dof);
+        iCtrlLeft->storeContext(&context_left);
+        iCtrlLeft->restoreContext(context_in_left);
+
+        string remoteArmNameLeft="/"+robot+"/left_arm";
+        optArmLeft.put("device", "remote_controlboard");
+        optArmLeft.put("remote",remoteArmNameLeft.c_str());
+        optArmLeft.put("local","/localArm/left");
+
+        robotArmLeft.open(optArmLeft);
+
+        if (!robotArmLeft.isValid())
+        {
+            printf("Left arm not available\n");
+            return false;
+        }
+
+        robotArmLeft.view(limArmLeft);
+        robotArmLeft.view(posLeft);
+        robotArmLeft.view(encLeft);
+
+        armLeft=new iCubArm("left");
+        chainLeft=armLeft->asChain();
+
+        chainLeft->releaseLink(0);
+        chainLeft->releaseLink(1);
+        chainLeft->releaseLink(2);
+
+        deque<IControlLimits*> limLeft;
+        limLeft.push_back(limTorso);
+        limLeft.push_back(limArmLeft);
+        armLeft->alignJointsBounds(limLeft);
+
+        armLeft->setAllConstraints(false);
+
+        thetaMinLeft.resize(10,0.0);
+        thetaMaxLeft.resize(10,0.0);
+        for (unsigned int i=0; i< chainLeft->getDOF(); i++)
+        {
+           thetaMinLeft[i]=(*chainLeft)(i).getMin();
+           thetaMaxLeft[i]=(*chainLeft)(i).getMax();
+        }
     }
 
     return true;
@@ -360,8 +396,12 @@ string PrecisionGrasp::extractData(const yarp::os::Bottle &data, const int t)
     double xdist=norm(ee_tmp-xdhat);
     double odist=norm(od-odhattmp);
 
-    if (xdist>0.01 && odist>0.1)
+    printf("\n\nodist %g xdist %g\n", odist, xdist);
+
+    if (xdist>0.01 || odist>0.05)
+    {
         manipulability=0.0;
+    }
     else
     {
         Matrix jacobian=arm->GeoJacobian();
@@ -378,7 +418,7 @@ string PrecisionGrasp::extractData(const yarp::os::Bottle &data, const int t)
         manipulability*=(1-exp(-limits));
     }
 
-    printf("\n\nmanipulability %g\n", manipulability);
+    printf("manipulability %g\n", manipulability);
     printf("cost %g\n\n", cost);
 
     double toll=0.2;
@@ -698,12 +738,19 @@ bool PrecisionGrasp::updateModule()
     if ((fromFile && !fromFileFinished) || (current_state==STATE_ESTIMATE))
     {
         double totTime=Time::now();
-        iCtrlRight->deleteContext(current_context_right);
-        iCtrlRight->storeContext(&current_context_right);
-        iCtrlRight->restoreContext(context_right);
-        iCtrlLeft->deleteContext(current_context_left);
-        iCtrlLeft->storeContext(&current_context_left);
-        iCtrlLeft->restoreContext(context_left);
+
+        if (!rightDisabled)
+        {
+            iCtrlRight->deleteContext(current_context_right);
+            iCtrlRight->storeContext(&current_context_right);
+            iCtrlRight->restoreContext(context_right);
+        }
+        if (!leftDisabled)
+        {
+            iCtrlLeft->deleteContext(current_context_left);
+            iCtrlLeft->storeContext(&current_context_left);
+            iCtrlLeft->restoreContext(context_left);
+        }
         if (fromFile)
         {
             if (!fillCloudFromFile())
@@ -791,12 +838,12 @@ bool PrecisionGrasp::updateModule()
                 ov_cones1=triplet1.ov_cones;
 
                 req=prepareData(triplet1,1);
-                if (ikPort1r.getOutputCount()>0)
+                if (ikPort1r.getOutputCount()>0 && !rightBlocked)
                 {
                     ikPort1r.write(req);
                     counter+=1;
                  }
-                if (ikPort1l.getOutputCount()>0)
+                if (ikPort1l.getOutputCount()>0 && !leftBlocked)
                 {
                     ikPort1l.write(req);
                     counter+=1;
@@ -815,12 +862,12 @@ bool PrecisionGrasp::updateModule()
 
                 req.clear();
                 req=prepareData(triplet2,2);
-                if (ikPort2r.getOutputCount()>0)
+                if (ikPort2r.getOutputCount()>0 && !rightBlocked)
                 {
                     ikPort2r.write(req);
                     counter+=1;
                 }
-                if (ikPort2l.getOutputCount()>0)
+                if (ikPort2l.getOutputCount()>0 && !leftBlocked)
                 {
                     ikPort2l.write(req);
                     counter+=1;
@@ -839,12 +886,12 @@ bool PrecisionGrasp::updateModule()
 
                 req.clear();
                 req=prepareData(triplet3,3);
-                if (ikPort3r.getOutputCount()>0)
+                if (ikPort3r.getOutputCount()>0 && !rightBlocked)
                 {
                     ikPort3r.write(req);
                     counter+=1;
                 }
-                if (ikPort3l.getOutputCount()>0)
+                if (ikPort3l.getOutputCount()>0 && !leftBlocked)
                 {
                     ikPort3l.write(req);
                     counter+=1;
@@ -864,12 +911,12 @@ bool PrecisionGrasp::updateModule()
 
                 req.clear();
                 req=prepareData(triplet4,4);
-                if (ikPort4r.getOutputCount()>0)
+                if (ikPort4r.getOutputCount()>0 && !rightBlocked)
                 {
                     ikPort4r.write(req);
                     counter+=1;
                 }
-                if (ikPort4l.getOutputCount()>0)
+                if (ikPort4l.getOutputCount()>0 && !leftBlocked)
                 {
                     ikPort4l.write(req);
                     counter+=1;
@@ -1849,9 +1896,21 @@ bool PrecisionGrasp::respond(const Bottle& command, Bottle& reply)
         if (command.size()>=2)
         {
             if (command.get(1).asString()=="right")
+            {
+                Network::disconnect(ikPort1r.getName().c_str(), "/handIKModule1/right/rpc");
+                Network::disconnect(ikPort2r.getName().c_str(), "/handIKModule2/right/rpc");
+                Network::disconnect(ikPort3r.getName().c_str(), "/handIKModule3/right/rpc");
+                Network::disconnect(ikPort4r.getName().c_str(), "/handIKModule4/right/rpc");
                 rightBlocked=true;
+            }
             else
+            {
+                Network::disconnect(ikPort1l.getName().c_str(), "/handIKModule1/left/rpc");
+                Network::disconnect(ikPort2l.getName().c_str(), "/handIKModule2/left/rpc");
+                Network::disconnect(ikPort3l.getName().c_str(), "/handIKModule3/left/rpc");
+                Network::disconnect(ikPort4l.getName().c_str(), "/handIKModule4/left/rpc");
                 leftBlocked=true;
+            }
             reply.addString("ack");
             return true;
         }
@@ -1866,9 +1925,21 @@ bool PrecisionGrasp::respond(const Bottle& command, Bottle& reply)
         if (command.size()>=2)
         {
             if (command.get(1).asString()=="right")
+            {
+                Network::connect(ikPort1r.getName().c_str(), "/handIKModule1/right/rpc");
+                Network::connect(ikPort2r.getName().c_str(), "/handIKModule2/right/rpc");
+                Network::connect(ikPort3r.getName().c_str(), "/handIKModule3/right/rpc");
+                Network::connect(ikPort4r.getName().c_str(), "/handIKModule4/right/rpc");
                 rightBlocked=false;
+            }
             else
+            {
+                Network::connect(ikPort1l.getName().c_str(), "/handIKModule1/left/rpc");
+                Network::connect(ikPort2l.getName().c_str(), "/handIKModule2/left/rpc");
+                Network::connect(ikPort3l.getName().c_str(), "/handIKModule3/left/rpc");
+                Network::connect(ikPort4l.getName().c_str(), "/handIKModule4/left/rpc");
                 leftBlocked=false;
+            }
             reply.addString("ack");
             return true;
         }
