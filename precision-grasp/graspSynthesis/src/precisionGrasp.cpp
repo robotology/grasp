@@ -15,10 +15,6 @@
 */
 
 #include "precisionGrasp.h"
-#ifndef __PCL_POINT_TYPE_CONVERSION__
-    #include <pcl/point_types_conversion.h>
-    #define __PCL_POINT_TYPE_CONVERSION__
-#endif
 
 using namespace std;
 using namespace yarp::os;
