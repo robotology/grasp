@@ -222,7 +222,6 @@ void OrientationThread::run()
             q=q*M_PI/180.0;
             arm->setAng(q);
 
-
             od[0]=od[0]*od[3];
             od[1]=od[1]*od[3];
             od[2]=od[2]*od[3];

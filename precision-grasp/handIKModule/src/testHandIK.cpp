@@ -114,7 +114,7 @@ double evaluateFingers(const HandIK_Variables &solution, const int id)
     return res;
 }
 
-int main(int argc, char *argv[])
+int test(int argc, char *argv[])
 {
     yarp::os::ResourceFinder rf;
     rf.setVerbose(true);

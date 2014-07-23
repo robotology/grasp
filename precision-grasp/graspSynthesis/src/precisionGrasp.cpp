@@ -199,8 +199,6 @@ bool PrecisionGrasp::openDevices()
     newDof[2]=1.0;
 
     iCtrlRight->setDOF(newDof,dof);
-    iCtrlRight->setLimits(7,-70.0,70.0);
-    iCtrlRight->setTrajTime(1.2);
     iCtrlRight->storeContext(&context_right);
     iCtrlRight->restoreContext(context_in_right);
 
@@ -224,8 +222,6 @@ bool PrecisionGrasp::openDevices()
     newDof[2]=1.0;
 
     iCtrlLeft->setDOF(newDof,dof);
-    iCtrlLeft->setLimits(7,-70.0,70.0);
-    iCtrlLeft->setTrajTime(1.2);
     iCtrlLeft->storeContext(&context_left);
     iCtrlLeft->restoreContext(context_in_left);
 
@@ -352,16 +348,26 @@ string PrecisionGrasp::extractData(const yarp::os::Bottle &data, const int t)
 
     iCtrl->askForPose(ee_tmp,axis_angle_tmp,xdhat,odhat,q);
     
-    yarp::sig::Vector ones(10,1.0);
+    q=q*M_PI/180.0;
+    arm->setAng(q);
 
-    double result=dot(q,ones);
+    yarp::sig::Vector od(3);
+    od[0]=axis_angle_tmp[0]*axis_angle_tmp[3];
+    od[1]=axis_angle_tmp[1]*axis_angle_tmp[3];
+    od[2]=axis_angle_tmp[2]*axis_angle_tmp[3];
 
-    if (result==0.0)
+    yarp::sig::Vector odhattmp(3);
+    odhattmp[0]=odhat[0]*odhat[3];
+    odhattmp[1]=odhat[1]*odhat[3];
+    odhattmp[2]=odhat[2]*odhat[3];
+
+    double xdist=norm(ee_tmp-xdhat);
+    double odist=norm(od-odhattmp);
+
+    if (xdist>0.01 && odist>0.1)
         manipulability=0.0;
     else
     {
-        q=q*M_PI/180.0;
-        arm->setAng(q);
         Matrix jacobian=arm->GeoJacobian();
         Matrix mulJac=jacobian*(jacobian.transposed());
 
@@ -373,7 +379,7 @@ string PrecisionGrasp::extractData(const yarp::os::Bottle &data, const int t)
             limits+=(q[k]-((*thetaMin)[k]))*((*thetaMax)[k]-q[k])/(((*thetaMax)[k]-(*thetaMin)[k])*((*thetaMax)[k]-(*thetaMin)[k]));
         }
         
-        manipulability+=(1-exp(-limits));
+        manipulability*=(1-exp(-limits));
     }
 
     printf("\n\nmanipulability %g\n", manipulability);
@@ -382,7 +388,6 @@ string PrecisionGrasp::extractData(const yarp::os::Bottle &data, const int t)
     double toll=0.2;
     if (cost<bestCost+toll && manipulability>(bestManipulability-toll))
     {
-        printf("yeah\n");
         string tag_0=b.get(0).asString().c_str();
         if (tag_0=="IK1")
             winner_ov_cones=ov_cones1;
@@ -403,8 +408,6 @@ string PrecisionGrasp::extractData(const yarp::os::Bottle &data, const int t)
         bestCost=cost;
         bestManipulability=manipulability;
     }
-    if (cost<bestCost && manipulability>bestManipulability)
-        printf("qua\n");
 
     return hand;
 }
