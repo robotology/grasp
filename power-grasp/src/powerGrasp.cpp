@@ -284,7 +284,6 @@ bool PowerGrasp::close()
 /************************************************************************/
 void PowerGrasp::filter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in,pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in_filtered)
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_tmp (new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::StatisticalOutlierRemoval<pcl::PointXYZRGB> sor;
     sor.setInputCloud (cloud_in);
     sor.setMeanK (cloud_in->size()/2);
