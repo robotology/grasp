@@ -34,7 +34,7 @@ ObjectReconstr::ObjectReconstr()
 bool ObjectReconstr::configure(ResourceFinder &rf)
 {
     string robot=rf.check("robot",Value("icub")).asString().c_str();
-    string name=rf.check("name",Value("objectReconstruction")).asString().c_str();
+    string name=rf.check("name",Value("objectReconstr")).asString().c_str();
     setName(name.c_str());
     outputDir=rf.getHomeContextPath().c_str();
     string boundBox=rf.check("computeBB",Value("on")).asString().c_str();
