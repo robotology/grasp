@@ -46,6 +46,10 @@ action: the set of pixels are projected in 3D and provided on the output port --
 /objectReconstr/mesh:o. The optional parameter "param1" can be set to "visualize"; in this case
 the reconstructed cloud will also be displayed using Point Cloud Library library.
 
+<b>CHANGE NAME</b> \n
+format: [name (newName)]\n
+action: The reconstructed pointclouds will be saved as newNameX.ply, where newName is the name given by the user and X is number increasing for each reconstruction saved on the same root name. Default name is 3Dobject.
+
 <b>GET</b> \n
 format: [get point (u v)]\n
 action: The pixel (u v) is projected in 3D and returned in the format (x y z).

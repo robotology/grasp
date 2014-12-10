@@ -43,6 +43,8 @@ bool ObjectReconstr::configure(ResourceFinder &rf)
     middlex=-1;
     middley=-1;
 
+    fileName = "3Dobject";
+
     string slash="/";
 
     string imL=slash + getName().c_str() + "/left:i";
@@ -118,11 +120,11 @@ Bottle ObjectReconstr::getPixelList()
 }
 
 /************************************************************************/
-void ObjectReconstr::savePointsPly(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud)
+void ObjectReconstr::savePointsPly(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, const string& name)
 {
     stringstream s;
     s.str("");
-    s<<outputDir + "/3Dobject" <<number;
+    s<<outputDir + "/" + name.c_str() <<number;
     string filename=s.str();
     string filenameNumb=filename+".ply";
     ofstream plyfile;
@@ -228,7 +230,7 @@ bool ObjectReconstr::updateModule()
             pointCloudPort.write();
 
             if (write)
-                savePointsPly(tmp);
+                savePointsPly(tmp, fileName);
 
             if (visualizationOn)
                 currentState=STATE_VISUALIZE;
@@ -357,6 +359,21 @@ bool ObjectReconstr::respond(const Bottle& command, Bottle& reply)
         reply.addVocab(ACK);
         return true;
     }
+
+    if (command.get(0).asString()=="name")
+    {
+        if (command.size()>=2){
+            fileName = command.get(1).asString();
+            reply.addVocab(ACK);
+            return true;
+ 	} else  {
+            reply.addVocab(NACK);
+	    reply.addString("No name was provided");
+            return true;
+        }
+
+    }
+
     if (command.get(0).asString()=="get")
     {
         if (command.get(1).asString()=="point" && command.size()==3)
