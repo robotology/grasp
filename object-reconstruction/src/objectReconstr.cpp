@@ -34,7 +34,7 @@ ObjectReconstr::ObjectReconstr()
 bool ObjectReconstr::configure(ResourceFinder &rf)
 {
     string robot=rf.check("robot",Value("icub")).asString().c_str();
-    string name=rf.check("name",Value("objectRec")).asString().c_str();
+    string name=rf.check("name",Value("objectReconstruction")).asString().c_str();
     setName(name.c_str());
     outputDir=rf.getHomeContextPath().c_str();
     string boundBox=rf.check("computeBB",Value("on")).asString().c_str();
@@ -362,11 +362,16 @@ bool ObjectReconstr::respond(const Bottle& command, Bottle& reply)
 
     if (command.get(0).asString()=="name")
     {
-        if (command.size()==2)
+        if (command.size()>=2)
             fileName = command.get(1).asString();
+            reply.addVocab(ACK);
+            return true;
+ 	} else  {
+            reply.addVocab(NACK);
+	    reply.addString("No name was provided");
+            return true;
+        }
 
-        reply.addVocab(ACK);
-        return true;
     }
 
     if (command.get(0).asString()=="get")
