@@ -120,7 +120,8 @@ Bottle ObjectReconstr::getPixelList()
 }
 
 /************************************************************************/
-void ObjectReconstr::savePointsPly(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, const string& name)
+void ObjectReconstr::savePointsPly(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
+                                   const string& name)
 {
     stringstream s;
     s.str("");
@@ -362,16 +363,18 @@ bool ObjectReconstr::respond(const Bottle& command, Bottle& reply)
 
     if (command.get(0).asString()=="name")
     {
-        if (command.size()>=2){
-            fileName = command.get(1).asString();
+        if (command.size()>=2)
+        {
+            fileName=command.get(1).asString().c_str();
             reply.addVocab(ACK);
-            return true;
- 	} else  {
+ 	    }
+        else
+        {
             reply.addVocab(NACK);
-	    reply.addString("No name was provided");
-            return true;
+	        reply.addString("No name was provided");
         }
 
+        return true;
     }
 
     if (command.get(0).asString()=="get")
