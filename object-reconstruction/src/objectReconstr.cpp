@@ -34,7 +34,7 @@ ObjectReconstr::ObjectReconstr()
 bool ObjectReconstr::configure(ResourceFinder &rf)
 {
     string robot=rf.check("robot",Value("icub")).asString().c_str();
-    string name=rf.check("name",Value("objectReconstr")).asString().c_str();
+    string name=rf.check("name",Value("objectRec")).asString().c_str();
     setName(name.c_str());
     outputDir=rf.getHomeContextPath().c_str();
     string boundBox=rf.check("computeBB",Value("on")).asString().c_str();
@@ -42,6 +42,8 @@ bool ObjectReconstr::configure(ResourceFinder &rf)
 
     middlex=-1;
     middley=-1;
+
+    fileName = "3Dobject";
 
     string slash="/";
 
@@ -118,11 +120,11 @@ Bottle ObjectReconstr::getPixelList()
 }
 
 /************************************************************************/
-void ObjectReconstr::savePointsPly(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud)
+void ObjectReconstr::savePointsPly(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, string name)
 {
     stringstream s;
     s.str("");
-    s<<outputDir + "/3Dobject" <<number;
+    s<<outputDir + "/" + name.c_str() <<number;
     string filename=s.str();
     string filenameNumb=filename+".ply";
     ofstream plyfile;
@@ -228,7 +230,7 @@ bool ObjectReconstr::updateModule()
             pointCloudPort.write();
 
             if (write)
-                savePointsPly(tmp);
+                savePointsPly(tmp, fileName);
 
             if (visualizationOn)
                 currentState=STATE_VISUALIZE;
@@ -357,6 +359,16 @@ bool ObjectReconstr::respond(const Bottle& command, Bottle& reply)
         reply.addVocab(ACK);
         return true;
     }
+
+    if (command.get(0).asString()=="name")
+    {
+        if (command.size()==2)
+            fileName = command.get(1).asString();
+
+        reply.addVocab(ACK);
+        return true;
+    }
+
     if (command.get(0).asString()=="get")
     {
         if (command.get(1).asString()=="point" && command.size()==3)
