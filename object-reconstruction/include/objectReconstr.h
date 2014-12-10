@@ -58,7 +58,7 @@ class ObjectReconstr: public yarp::os::RFModule
     bool updateCloud();
 	void filter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in,pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in_filtered, bool second=false);
     yarp::os::Bottle getPixelList();
-    void savePointsPly(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, std::string name = "3Dtool");
+    void savePointsPly(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, const std::string& name);
 
 public:
 

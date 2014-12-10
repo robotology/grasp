@@ -120,7 +120,7 @@ Bottle ObjectReconstr::getPixelList()
 }
 
 /************************************************************************/
-void ObjectReconstr::savePointsPly(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, string name)
+void ObjectReconstr::savePointsPly(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, const string& name)
 {
     stringstream s;
     s.str("");
@@ -362,7 +362,7 @@ bool ObjectReconstr::respond(const Bottle& command, Bottle& reply)
 
     if (command.get(0).asString()=="name")
     {
-        if (command.size()>=2)
+        if (command.size()>=2){
             fileName = command.get(1).asString();
             reply.addVocab(ACK);
             return true;
