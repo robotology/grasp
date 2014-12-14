@@ -1,0 +1,154 @@
+<portscope rows="2" columns="2" carrier="mcast">
+  <plot gridx="0"
+        gridy="0"
+        hspan="1"
+        vspan="1"
+        title="Left Hand: Thumb"
+        size="1000"
+        minval="0"
+        maxval="180"
+        bgcolor="White">
+    <graph remote="/icub/left_arm/state:o"
+           index="8"
+           color="Blue"
+           title="Opposition"
+           type="Line"
+           size="4">
+    </graph>
+    <graph remote="/icub/left_arm/state:o"
+           index="9"
+           color="Red"
+           title="Proximal"
+           type="Line"
+           size="2">
+    </graph>
+    <graph remote="/icub/left_arm/state:o"
+           index="10"
+           color="Green"
+           title="Distal"
+           type="Line"
+           size="2">
+    </graph>
+  </plot>
+  <plot gridx="0"
+        gridy="1"
+        hspan="1"
+        vspan="1"
+        title="Left Hand: Supportive Fingers"
+        size="1000"
+        minval="0"
+        maxval="180"
+        bgcolor="White">
+    <graph remote="/icub/left_arm/state:o"
+           index="11"
+           color="Blue"
+           title="Index Proximal"
+           type="Line"
+           size="2">
+    </graph>
+    <graph remote="/icub/left_arm/state:o"
+           index="12"
+           color="Red"
+           title="Index Distal"
+           type="Line"
+           size="2">
+    </graph>
+    <graph remote="/icub/left_arm/state:o"
+           index="13"
+           color="Green"
+           title="Middle Proximal"
+           type="Line"
+           size="2">
+    </graph>
+    <graph remote="/icub/left_arm/state:o"
+           index="14"
+           color="Magenta"
+           title="Middle Distal"
+           type="Line"
+           size="2">
+    </graph>
+    <graph remote="/icub/left_arm/state:o"
+           index="15"
+           color="Black"
+           title="Ring-Little"
+           type="Line"
+           size="2">
+    </graph>
+  </plot>
+  <plot gridx="1"
+        gridy="0"
+        hspan="1"
+        vspan="1"
+        title="Right Hand: Thumb"
+        size="1000"
+        minval="0"
+        maxval="180"
+        bgcolor="White">
+    <graph remote="/icub/right_arm/state:o"
+           index="8"
+           color="Blue"
+           title="Opposition"
+           type="Line"
+           size="4">
+    </graph>
+    <graph remote="/icub/right_arm/state:o"
+           index="9"
+           color="Red"
+           title="Proximal"
+           type="Line"
+           size="2">
+    </graph>
+    <graph remote="/icub/right_arm/state:o"
+           index="10"
+           color="Green"
+           title="Distal"
+           type="Line"
+           size="2">
+    </graph>
+  </plot>
+  <plot gridx="1"
+        gridy="1"
+        hspan="1"
+        vspan="1"
+        title="Right Hand: Supportive Fingers"
+        size="1000"
+        minval="0"
+        maxval="180"
+        bgcolor="White">
+    <graph remote="/icub/right_arm/state:o"
+           index="11"
+           color="Blue"
+           title="Index Proximal"
+           type="Line"
+           size="2">
+    </graph>
+    <graph remote="/icub/right_arm/state:o"
+           index="12"
+           color="Red"
+           title="Index Distal"
+           type="Line"
+           size="2">
+    </graph>
+    <graph remote="/icub/right_arm/state:o"
+           index="13"
+           color="Green"
+           title="Middle Proximal"
+           type="Line"
+           size="2">
+    </graph>
+    <graph remote="/icub/right_arm/state:o"
+           index="14"
+           color="Magenta"
+           title="Middle Distal"
+           type="Line"
+           size="2">
+    </graph>
+    <graph remote="/icub/right_arm/state:o"
+           index="15"
+           color="Black"
+           title="Ring-Little"
+           type="Line"
+           size="2">
+    </graph>
+  </plot>
+</portscope>

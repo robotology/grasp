@@ -1,0 +1,112 @@
+<application>
+  <authors>
+    <author email="giuseppe.cotugno@kcl.ac.uk">Giuseppe Cotugno</author>
+  </authors>
+  <name>SIM Grasp Application IIT</name>
+  <dependencies>
+    <port>/postureControl/interface:i</port>
+    <port>/icubSim/left_arm/state:o</port>
+    <port>/icubSim/right_arm/state:o</port>
+    <port>/GraspCtrl:io</port>
+  </dependencies>
+
+<!-- Logic modules -->
+  <module>
+    <name>GraspModule</name>
+    <parameters>--context GraspModuleApp/icub --yarpmanager 1</parameters>
+    <node>localhost</node>
+    <stdio>localhost</stdio>
+    <tag>GraspModule</tag>
+  </module>
+
+<!-- DARWIN architecture modules -->
+  <module>
+    <name>postureControl</name>
+    <parameters>--name /postureControl --robot icubSim </parameters>
+    <tag>postureControl</tag>
+    <node>localhost</node>
+  </module>
+
+<!-- Execution modules -->
+    <module>
+        <name>iCub_SIM</name>
+        <parameters></parameters>
+        <node>localhost</node>
+        <stdio>localhost</stdio>
+        <tag>simulator</tag>
+    </module>
+
+<!-- Visualization modules -->
+    <module>
+        <name>robotMotorGui</name>
+        <parameters></parameters>
+        <node>localhost</node>
+        <stdio>localhost</stdio>
+        <tag>motorgui</tag>
+    </module>
+
+    <module>
+      <name>yarpscope</name>
+      <parameters>--policy DARWIN_ROOT --xml templates/applications/GraspYarpScopeIcub.xml</parameters>
+      <node>localhost</node>
+      <tag>GraspModule</tag>
+    </module>
+
+    <module>
+        <name>iCubGui</name>
+        <node>localhost</node>
+        <tag>icubgui</tag>
+    </module>
+
+<!-- Connections -->
+
+<!-- DARWIN infrastructure -->
+  <connection>
+    <from>/grasp/left:o</from>
+    <to>/postureControl/interface:i</to>
+    <protocol>tcp</protocol>
+  </connection>
+
+  <connection>
+    <from>/grasp/right:o</from>
+    <to>/postureControl/interface:i</to>
+    <protocol>tcp</protocol>
+  </connection>
+
+  <connection>
+    <from>/Observer/GraspCtrl:io</from>
+    <to>/grasp/command:i</to>
+    <protocol>tcp</protocol>
+  </connection>
+
+<!-- Simulator dependent -->
+  <connection>
+    <from>/icubSim/left_arm/state:o</from>
+    <to>/grasp/left:i</to>
+    <protocol>mcast</protocol>
+  </connection>
+
+  <connection>
+    <from>/icubSim/right_arm/state:o</from>
+    <to>/grasp/right:i</to>
+    <protocol>mcast</protocol>
+  </connection>
+
+<!--
+  <connection>
+    <from>/observer/unknown-port:o</from>
+    <to>/grasp/command:i</to>
+    <protocol>undecided</protocol>
+  </connection>
+  <connection>
+    <from>/grasp/outcome:o</from>
+    <to>/observer/unknown-port:i</to>
+    <protocol>undecided</protocol>
+  </connection>
+  <connection>
+    <from>/yarpcontroller/unknown-port:o</from>
+    <to>/grasp/yarp:i</to>
+    <protocol>undecided</protocol>
+  </connection>
+-->
+</application>
