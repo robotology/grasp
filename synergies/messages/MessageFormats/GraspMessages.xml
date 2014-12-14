@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="DarwinMessages.xslt"?>
+<!-- Copyright: (C) 2013 The Darwin Consortium -->
+<!-- CopyPolicy: Released under the terms of the LGPLv2.1 or later -->
+<Bottles xmlns="http://darwin-project.eu/namespaces/TypeSafeBottle" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://darwin-project.eu/namespaces/TypeSafeBottle DarwinMessages.xsd">
+	<!--============================================-->
+	<!-- C++ namespace for these types. Please don't change.         -->
+	<!--============================================-->
+	<Namespace name="darwin">
+		<Namespace name="msg"/>
+	</Namespace>
+	<!--============================================-->
+	<!-- Common, simple message formats that can serve as building-->
+	<!-- blocks for more complex messages. These can be re-used   -->
+	<!-- by multiple partners and should remain stable once agreed   -->
+	<!--============================================-->
+	<Struct className="Point2D">
+		<Variable name="x" type="double"/>
+		<Variable name="y" type="double"/>
+	</Struct>
+	<Struct className="Point3D">
+		<Variable name="x" type="double"/>
+		<Variable name="y" type="double"/>
+		<Variable name="z" type="double"/>
+	</Struct>
+  <Struct className="CommandInterface">
+		<Variable name="command" type="vocab"/>
+	</Struct>
+  <Struct className="Coordinates3D">
+    <Variable name="x" type="double"/>
+    <Variable name="y" type="double"/>
+    <Variable name="z" type="double"/>
+  </Struct>
+  <Struct className="Cylinder1">
+    <Variable name="P1" type="Coordinates3D"/>
+    <Variable name="P2" type="Coordinates3D"/>
+    <Variable name="Radius" type="double"/>
+  </Struct>
+	<Struct className="Cylinder2">
+		<Variable name="Center" type="Coordinates3D"/>
+		<Variable name="Normal" type="Coordinates3D"/>
+		<Variable name="Radius" type="double"/>
+		<Variable name="Height" type="double"/>
+	</Struct>
+  <Struct className="OrientedCircle">
+    <Variable name="Center" type="Coordinates3D"/>
+    <Variable name="Normal" type="Coordinates3D"/>
+    <Variable name="Radius" type="double"/>
+  </Struct>
+	<!--============================================-->
+	<!--Messages specific to GraspModule	        -->
+	<!--============================================-->
+
+	<Vector className="HandICub" valueType="double"/>
+  <Wrapper className="HandCommand">
+    <Bottle subID="lhan" valueType="HandICub"/>
+    <Bottle subID="rhan" valueType="HandICub"/>
+  </Wrapper>
+
+  <Struct className="GraspDescriptor">
+    <Variable name="effector" type="vocab"/> <!--effector (lhan/rhan)-->
+    <Variable name="type" type="vocab"/> <!--type of grasp (pow/pin/rel)-->
+    <Variable name="object" type="Cylinder1"/> <!--the bounding cylinder of the object to be grasped-->
+  </Struct>
+
+  <Vector className="GraspCommand" valueType="GraspDescriptor"/> <!--pack left and/or right grasp descriptor in one message-->
+	<Vector className="GraspResult" valueType="vocab"/> <!--[succ],[fail],[ack]-->
+
+</Bottles>

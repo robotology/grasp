@@ -1,0 +1,66 @@
+<application>
+  <authors>
+    <author email="giuseppe.cotugno@kcl.ac.uk">Giuseppe Cotugno</author>
+  </authors>
+  <name>Grasp Application IIT</name>
+  <dependencies>
+    <port>/postureControl/interface:i</port>
+    <port>/icub/left_arm/state:o</port>
+    <port>/icub/right_arm/state:o</port>
+    <port>/GraspCtrl:io</port>
+    <!--Future use: add a port in the observer if more grasp feedback is required-->
+    <!--<port>/Observer/GraspOutcome:i</port>-->
+    <!--Future use: add a port for visualization control-->
+    <!--<port>/VisControl/GraspCtrl:o</port>-->
+  </dependencies>
+  <module>
+    <name>GraspModule</name>
+    <parameters>--context GraspModuleApp/icub --yarpmanager 1</parameters>
+    <node>localhost</node>
+    <stdio></stdio>
+    <tag>GraspModule</tag>
+  </module>
+  <module>
+    <name>yarpscope</name>
+    <parameters>--policy DARWIN_ROOT --xml templates/applications/GraspYarpScopeIcub.xml</parameters>
+    <node>localhost</node>
+    <tag>GraspModule</tag>
+  </module>
+  <connection>
+    <from>/grasp/left:o</from>
+    <to>/postureControl/interface:i</to>
+    <protocol>tcp</protocol>
+  </connection>
+  <connection>
+    <from>/grasp/right:o</from>
+    <to>/postureControl/interface:i</to>
+    <protocol>tcp</protocol>
+  </connection>
+  <connection>
+    <from>/icub/left_arm/state:o</from>
+    <to>/grasp/left:i</to>
+    <protocol>tcp</protocol>
+  </connection>
+  <connection>
+    <from>/icub/right_arm/state:o</from>
+    <to>/grasp/right:i</to>
+    <protocol>tcp</protocol>
+  </connection>
+  <connection>
+    <from>/GraspCtrl:io</from>
+    <to>/grasp/command:i</to>
+    <protocol>tcp</protocol>
+  </connection>
+  <!--Uncomment to connect to the /grasp/outcome:o port-->
+  <!--<connection>
+  <from>/grasp/outcome:o</from>
+	<to>/Observer/GraspOutcome:i</to>
+	<protocol>tcp</protocol>
+  </connection>-->
+  <!--Uncomment to connect the visualization controller to the /grasp/yarp:i port-->
+  <!--<connection>
+  <from>/VisControl/GraspControl:o</from>
+  <to>/grasp/yarp:i</to>
+  <protocol>tcp</protocol>
+  </connection>-->
+</application>
