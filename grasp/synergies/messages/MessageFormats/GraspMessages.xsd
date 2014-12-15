@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright: (C) 2013 King's College London -->
-<!-- Authors: Kris De Meyer -->
-<!-- CopyPolicy: Released under the terms of the LGPLv2.1 or later -->
-<xs:schema xmlns="http://darwin-project.eu/namespaces/TypeSafeBottle" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://darwin-project.eu/namespaces/TypeSafeBottle" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xs:include schemaLocation="./TypeSafeBottle/YarpTypeSafeBottle.xsd"/>
-</xs:schema>
