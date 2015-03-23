@@ -34,7 +34,7 @@ ObjectReconstr::ObjectReconstr()
 bool ObjectReconstr::configure(ResourceFinder &rf)
 {
     string robot=rf.check("robot",Value("icub")).asString().c_str();
-    string name=rf.check("name",Value("objectReconstr")).asString().c_str();
+    string name=rf.check("name",Value("object-reconstruction")).asString().c_str();
     setName(name.c_str());
     outputDir=rf.getHomeContextPath().c_str();
     string boundBox=rf.check("computeBB",Value("on")).asString().c_str();
@@ -71,8 +71,8 @@ bool ObjectReconstr::configure(ResourceFinder &rf)
         imagePortInRight.close();
         return false;
     }
-
     segmentationPort.open((slash+getName().c_str()+"/segmentation").c_str());
+
     pointCloudPort.open((slash + getName().c_str() + "/mesh:o").c_str());
     rpc.open((slash + getName().c_str() + "/rpc").c_str());
     attach(rpc);
@@ -89,6 +89,17 @@ bool ObjectReconstr::configure(ResourceFinder &rf)
         return false;
     }
 
+    // Visualizer Thread
+    visThrd = new VisThread(50, "Cloud");
+    if (!visThrd->start())
+    {
+        delete visThrd;
+        visThrd = 0;
+        cout << "\nERROR!!! visThread wasn't instantiated!!\n";
+        return false;
+    }
+    cout << "PCL visualizer Thread istantiated...\n";
+
     return true;
 }
 
@@ -103,6 +114,12 @@ bool ObjectReconstr::close()
     segmentationPort.close();
 
     recRoutine.close();
+    if (visThrd)    //Close visualization thread clean.
+    {
+        visThrd->stop();
+        delete visThrd;
+        visThrd =  0;
+    }
 
     return true;
 }
@@ -248,6 +265,7 @@ bool ObjectReconstr::updateModule()
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud=recRoutine.getPointCloud();
             if (visualizationOn)
             {
+                /*
                 boost::shared_ptr<pcl::visualization::PCLVisualizer> tmpViewer(new pcl::visualization::PCLVisualizer("Point Cloud Viewer"));
                 tmpViewer->setBackgroundColor (0, 0, 0);
                 if (computeBB)
@@ -257,6 +275,15 @@ bool ObjectReconstr::updateModule()
                 pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudComplete;
                 cloudComplete=recRoutine.getPointCloudComplete();
                 visualize(tmpViewer, cloudComplete);
+                */
+
+                visThrd->updateCloud(cloud);
+                if (computeBB)
+                {
+                    visThrd->addBoundingBox(true);
+                }
+
+
             }
             currentState=STATE_WAIT;
         }
@@ -451,6 +478,7 @@ bool ObjectReconstr::respond(const Bottle& command, Bottle& reply)
 }
 
 /************************************************************************/
+/*
 void ObjectReconstr::visualize(boost::shared_ptr<pcl::visualization::PCLVisualizer> tmpViewer, pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud)
 {
     pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> rgb(cloud);
@@ -472,3 +500,4 @@ void ObjectReconstr::visualize(boost::shared_ptr<pcl::visualization::PCLVisualiz
     tmpViewer->removePointCloud(id);
 }
 
+*/

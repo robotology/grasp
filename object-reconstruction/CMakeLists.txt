@@ -17,9 +17,9 @@ include_directories(${objects3D_INCLUDE_DIRS})
 include_directories(${minimumBoundingBox_INCLUDE_DIRS})
 
 #file(GLOB source src/*.cpp)
-set(source src/main.cpp src/objectReconstr.cpp src/reconstructionRoutine.cpp)
+set(source src/main.cpp src/objectReconstr.cpp src/reconstructionRoutine.cpp src/visThread.cpp)
 #file(GLOB header include/*.h)
-set(header include/objectReconstr.h include/reconstructionRoutine.h)
+set(header include/objectReconstr.h include/reconstructionRoutine.h include/visThread.h)
 
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
@@ -27,3 +27,5 @@ add_definitions(${PCL_DEFINITIONS})
 add_executable(${PROJECTNAME} ${source} ${header})
 target_link_libraries(${PROJECTNAME} ${YARP_LIBRARIES} stereoVision objects3D minimumBoundingBox icubmod ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
 install(TARGETS ${PROJECTNAME} DESTINATION bin)
+
+yarp_install(FILES ${PROJECTNAME}.xml DESTINATION ${ICUBCONTRIB_MODULES_INSTALL_DIR})
