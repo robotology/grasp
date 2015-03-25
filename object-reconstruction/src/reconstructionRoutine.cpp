@@ -35,7 +35,7 @@ bool ReconstructionRoutine::open(const Property &options)
 
     string configFileDisparity=opt.check("ConfigDisparity",Value("icubEyes.ini")).asString().c_str();
     string cameraContext=opt.check("CameraContext",Value("cameraCalibration")).asString().c_str();
-    string name=opt.check("name",Value("objectReconstr")).asString().c_str();
+    string name=opt.check("name",Value("object-reconstruction")).asString().c_str();
     disparityOut.open("/"+name+"/depth:o");
 
     ResourceFinder cameraFinder;

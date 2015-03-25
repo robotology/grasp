@@ -2,83 +2,72 @@
     <name>Precision Grasp</name>
     
     <dependencies>
-	<port>/icub/camcalib/left/out</port>
+    <port>/icub/camcalib/left/out</port>
     </dependencies>
 
     <module>
         <name>graphBasedSegmentation</name>
         <node>node1</node>
         <parameters>--name GBSeg</parameters>
-        <tag>GBSeg</tag>
     </module>
 
     <module>
         <name>object-reconstruction</name>
         <node>node2</node>
-        <tag>objectReconstr</tag>
     </module>
-	
+    
     <module>
         <name>yarpview</name>
         <node>node3</node>
         <parameters>--name /segView --x 0 --y 0 --RefreshTime 33 --out /segView/coordinates:out</parameters>
-        <tag>segmentView</tag>
     </module>
-	
-	<module>
+    
+    <module>
         <name>handIKModule</name>
         <node>node3</node>
         <parameters>--name handIKModule1</parameters>
-        <tag>hIK1r</tag>
     </module>
-	
-	<module>
+    
+    <module>
         <name>handIKModule</name>
         <node>node3</node>
         <parameters>--name handIKModule1 --hand left</parameters>
-        <tag>hIK1l</tag>
     </module>
-	
-	<module>
+    
+    <module>
         <name>handIKModule</name>
         <node>node3</node>
         <parameters>--name handIKModule2</parameters>
-        <tag>hIK2r</tag>
     </module>
-	
-	<module>
+    
+    <module>
         <name>handIKModule</name>
         <node>node3</node>
         <parameters>--name handIKModule2 --hand left</parameters>
-        <tag>hIK2l</tag>
     </module>
-	
-	<module>
+    
+    <module>
         <name>handIKModule</name>
         <node>node3</node>
         <parameters>--name handIKModule3</parameters>
-        <tag>hIK3r</tag>
     </module>
-	
-	<module>
+    
+    <module>
         <name>handIKModule</name>
         <node>node3</node>
         <parameters>--name handIKModule3 --hand left</parameters>
-        <tag>hIK3l</tag>
     </module>
-	
-	<module>
+    
+    <module>
         <name>handIKModule</name>
         <node>node3</node>
         <parameters>--name handIKModule4</parameters>
-        <tag>hIK4r</tag>
     </module>
-	
-	<module>
+    
+    <module>
         <name>handIKModule</name>
         <node>node3</node>
         <parameters>--name handIKModule4 --hand left</parameters>
-        <tag>hIK4l</tag>
     </module>
 
     <connection>
@@ -86,8 +75,8 @@
         <to>/GBSeg/rawImg:i</to>
         <protocol>udp</protocol>
     </connection>
-	
-	<connection>
+    
+    <connection>
         <from>/segView/coordinates:out</from>
         <to>/precision-grasp/rpc</to>
         <protocol>tcp</protocol>
@@ -110,20 +99,20 @@
         <to>/wholeBodyDynamics/rpc:i</to>
         <protocol>tcp</protocol>
     </connection>
-	
+    
     <connection>
         <from>/precision-grasp/are/rpc:o</from>
         <to>/actionsRenderingEngine/rpc</to>
         <protocol>tcp</protocol>
     </connection>
-	
-	<connection>
+    
+    <connection>
         <from>/object-reconstruction/mesh:o</from>
         <to>/precision-grasp/mesh:i</to>
         <protocol>tcp</protocol>
     </connection>
-	
-	<connection>
+    
+    <connection>
         <from>/precision-grasp/reconstruction</from>
         <to>/object-reconstruction/rpc</to>
         <protocol>tcp</protocol>

@@ -332,7 +332,7 @@ bool ObjectReconstr::respond(const Bottle& command, Bottle& reply)
         reply.addString("To obtain a reconstruction, the module needs a segmentation algorithm that returns the set of pixels belonging to the object");
         reply.addString("It typically uses the graphBasedSegmentation module");
         reply.addString("Provide a point of the object first, in the format x y, for instance clicking on the segmentation image.");
-        reply.addString("Then, when you send the command 3Drec, you will be provided with the reconstructed object along with the minimum enclosing bounding box on the output port of the module -- typically /objectReconstr/mesh:o.");
+        reply.addString("Then, when you send the command 3Drec, you will be provided with the reconstructed object along with the minimum enclosing bounding box on the output port of the module -- typically /object-reconstruction/mesh:o.");
         reply.addString("If you also want to visualize the result, the command is 3Drec visualize.");
         reply.addString("If you want to reconstruct a single pixel, the command is get point (x y).");
         return true;
