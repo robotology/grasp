@@ -23,6 +23,7 @@
 #include <iCub/data3D/SurfaceMeshWithBoundingBox.h>
 #include <iCub/data3D/minBoundBox.h>
 #include <reconstructionRoutine.h>
+#include <visThread.h>
 
 #define ACK                     VOCAB3('a','c','k')
 #define NACK                    VOCAB4('n','a','c','k')
@@ -53,8 +54,9 @@ class ObjectReconstr: public yarp::os::RFModule
     yarp::os::RpcClient segmentationPort;
 
     ReconstructionRoutine recRoutine;
+    VisThread *visThrd;
 
-    void visualize(boost::shared_ptr<pcl::visualization::PCLVisualizer> tmpViewer, pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud);
+    //void visualize(boost::shared_ptr<pcl::visualization::PCLVisualizer> tmpViewer, pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud);
     bool updateCloud();
 	void filter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in,pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in_filtered, bool second=false);
     yarp::os::Bottle getPixelList();
