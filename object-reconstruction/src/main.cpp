@@ -106,8 +106,6 @@ Windows, Linux
 #include <yarp/os/ResourceFinder.h>
 #include <objectReconstr.h>
 
-YARP_DECLARE_DEVICES(icubmod)
-
 int main(int argc, char *argv[])
 {
     Network yarp;
@@ -117,8 +115,6 @@ int main(int argc, char *argv[])
         printf("No yarp network\n");
         return -1;
     }
-
-    YARP_REGISTER_DEVICES(icubmod)
 
     ResourceFinder rf;
     rf.setVerbose(true);

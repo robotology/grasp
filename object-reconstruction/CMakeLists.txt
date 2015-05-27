@@ -25,7 +25,7 @@ link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
 add_executable(${PROJECTNAME} ${source} ${header})
-target_link_libraries(${PROJECTNAME} ${YARP_LIBRARIES} stereoVision objects3D minimumBoundingBox icubmod ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(${PROJECTNAME} ${YARP_LIBRARIES} stereoVision objects3D minimumBoundingBox ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
 install(TARGETS ${PROJECTNAME} DESTINATION bin)
 
 yarp_install(FILES ${PROJECTNAME}.xml DESTINATION ${ICUBCONTRIB_MODULES_INSTALL_DIR})

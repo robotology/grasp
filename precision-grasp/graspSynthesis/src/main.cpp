@@ -208,16 +208,12 @@ Windows, Linux
 #include "precisionGrasp.h"
 #include <iCub/grasp/forceClosure.h>
 
-YARP_DECLARE_DEVICES(icubmod)
-
 int main(int argc, char *argv[])
 {
     yarp::os::Network yarp;
 
     if (!yarp.checkNetwork())
         return -1;
-
-    YARP_REGISTER_DEVICES(icubmod)
 
     yarp::os::ResourceFinder rf;
     rf.setVerbose(true);

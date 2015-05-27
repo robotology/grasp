@@ -30,5 +30,5 @@ link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
 add_executable (${PROJECTNAME} ${source} ${header})
-target_link_libraries (${PROJECTNAME} ${PCL_LIBRARIES} ${YARP_LIBRARIES} minimumBoundingBox iKin icubmod ctrlLib learningMachine objects3D)
+target_link_libraries (${PROJECTNAME} ${PCL_LIBRARIES} ${YARP_LIBRARIES} minimumBoundingBox iKin ctrlLib learningMachine objects3D)
 install(TARGETS ${PROJECTNAME} DESTINATION bin)

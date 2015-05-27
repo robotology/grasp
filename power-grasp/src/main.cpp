@@ -226,16 +226,12 @@ Windows, Linux
 #include <yarp/os/ResourceFinder.h>
 #include <powerGrasp.h>
 
-YARP_DECLARE_DEVICES(icubmod)
-
 int main(int argc, char *argv[])
 {
     yarp::os::Network yarp;
 
     if (!yarp.checkNetwork())
         return -1;
-
-    YARP_REGISTER_DEVICES(icubmod)
 
     yarp::os::ResourceFinder rf;
     rf.setVerbose(true);
