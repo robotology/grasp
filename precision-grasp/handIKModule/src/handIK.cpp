@@ -244,8 +244,8 @@ public:
         g_l[0]=1.0; g_u[0]=1e20;
 
         // contact points
-        g_l[1]=0.0; g_u[1]=1e-5;
-        g_l[2]=0.0; g_u[2]=1e-5;
+        g_l[1]=g_u[1]=0.0;
+        g_l[2]=g_u[2]=0.0;
 
         // thumb out of the ellipsoid
         /*g_l[3]=1.0; g_u[3]=1e20;
@@ -254,9 +254,7 @@ public:
 
         // contact points (middle)
         if (problem.nFingers==3)
-        {
-            g_l[3]=0.0; g_u[3]=1e-5;
-        }
+            g_l[3]=g_u[3]=0.0;
 
         return true;
     }
