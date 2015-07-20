@@ -15,6 +15,9 @@ set(folder_header include/handIK.h include/handIKModule.h)
 source_group("Source Files" FILES ${folder_source})
 source_group("Header Files" FILES ${folder_header})
 
+add_definitions(${IPOPT_DEFINITIONS})
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${IPOPT_LINKER_FLAGS}")
+
 add_executable(${PROJECTNAME} ${folder_source} ${folder_header})
 target_link_libraries(${PROJECTNAME} ${YARP_LIBRARIES} iKin ${IPOPT_LIBRARIES})
 install(TARGETS ${PROJECTNAME} DESTINATION bin)
