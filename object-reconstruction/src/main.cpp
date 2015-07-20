@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     if (!yarp.checkNetwork())
     {
         printf("No yarp network\n");
-        return -1;
+        return 1;
     }
 
     ResourceFinder rf;

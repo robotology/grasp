@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
     yarp::os::Network yarp;
 
     if (!yarp.checkNetwork())
-        return -1;
+        return 1;
 
     yarp::os::ResourceFinder rf;
     rf.setVerbose(true);
