@@ -28,7 +28,7 @@ source_group("Source Files" FILES ${source})
 source_group("Header Files" FILES ${header})
 
 link_directories(${PCL_LIBRARY_DIRS})
-add_definitions(${PCL_DEFINITIONS})
+add_definitions(${PCL_DEFINITIONS} -D_USE_MATH_DEFINES)
 
 add_executable (${PROJECTNAME} ${source} ${header})
 target_link_libraries (${PROJECTNAME} ${PCL_LIBRARIES} ${YARP_LIBRARIES} minimumBoundingBox ctrlLib forceClosure objects3D iKin)

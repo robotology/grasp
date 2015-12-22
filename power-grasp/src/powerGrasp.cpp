@@ -14,6 +14,7 @@
  * Public License for more details
 */
 
+#include <cmath>
 #include "powerGrasp.h"
 
 using namespace std;

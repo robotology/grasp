@@ -18,8 +18,8 @@
 #define __POWER_GRASP_MODULE_H__
 
 #include <fstream>
-#include <string.h>
-#include <stdlib.h>
+#include <string>
+#include <cstdlib>
 #include <vector>
 #include <yarp/os/RFModule.h>
 #include <yarp/os/BufferedPort.h>

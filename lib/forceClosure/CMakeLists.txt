@@ -13,6 +13,7 @@ file(GLOB source src/*.cpp)
 source_group("Source Files" FILES ${source})
 source_group("Header Files" FILES ${header})
 
+add_definitions(-D_USE_MATH_DEFINES)
 add_library(${PROJECTNAME} ${source} ${header})
 target_link_libraries(${PROJECTNAME} ctrlLib ${YARP_LIBRARIES})
 

@@ -20,8 +20,7 @@ source_group("Source Files" FILES ${source})
 source_group("Header Files" FILES ${header} ${header_private})
 
 link_directories(${PCL_LIBRARY_DIRS})
-add_definitions(${PCL_DEFINITIONS})
-
+add_definitions(${PCL_DEFINITIONS} -D_USE_MATH_DEFINES)
 add_library(${PROJECTNAME} ${source} ${header} ${header_private})
 target_link_libraries(${PROJECTNAME} ${PCL_LIBRARIES} ${YARP_LIBRARIES} objects3D)
 

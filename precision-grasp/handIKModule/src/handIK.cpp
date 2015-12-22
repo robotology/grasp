@@ -15,7 +15,8 @@
 */
 
 
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
 #include <yarp/math/Math.h>
 #include <iCub/ctrl/math.h>
 #include "handIK.h"

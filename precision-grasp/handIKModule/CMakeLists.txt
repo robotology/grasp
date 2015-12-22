@@ -15,7 +15,7 @@ set(folder_header include/handIK.h include/handIKModule.h)
 source_group("Source Files" FILES ${folder_source})
 source_group("Header Files" FILES ${folder_header})
 
-add_definitions(${IPOPT_DEFINITIONS})
+add_definitions(${IPOPT_DEFINITIONS} -D_USE_MATH_DEFINES)
 add_executable(${PROJECTNAME} ${folder_source} ${folder_header})
 set_property(TARGET ${PROJECTNAME} APPEND_STRING PROPERTY LINK_FLAGS " ${IPOPT_LINK_FLAGS}")
 target_link_libraries(${PROJECTNAME} ${YARP_LIBRARIES} iKin ${IPOPT_LIBRARIES})

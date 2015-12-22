@@ -1,9 +1,12 @@
+
+#include <cmath>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+
 #include <yarp/os/Time.h>
 #include <yarp/os/ResourceFinder.h>
 #include <yarp/sig/all.h>
