@@ -96,16 +96,15 @@ using namespace iCub::ctrl;
 
 int main(int argc, char *argv[])
 {
-    yarp::os::Network yarp;
-    
+    yarp::os::Network yarp;    
     if (!yarp.checkNetwork())
         return 1;
 
     yarp::os::ResourceFinder rf;
     rf.setVerbose(true);
-    rf.setDefaultContext("handIK/conf");
+    rf.setDefaultContext("handIK");
     rf.setDefaultConfigFile("contactPoints_fitness1.ini");
-    rf.configure("ICUB_ROOT",argc,argv);
+    rf.configure(argc,argv);
     
     HandIKModule mod;
     mod.runModule(rf);
