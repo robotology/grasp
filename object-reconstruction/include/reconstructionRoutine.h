@@ -18,12 +18,13 @@
 #define __RECONSTRUCTION_ROUTINE_H__
 
 #include <sstream>
-#include <cv.h>
-#include <yarp/sig/Image.h>
+
 #include <pcl/common/common_headers.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/filters/statistical_outlier_removal.h>
 #include <pcl/filters/voxel_grid.h>
+
+#include <yarp/sig/Image.h>
 #include <iCub/stereoVision/disparityThread.h>
 
 class ReconstructionRoutine

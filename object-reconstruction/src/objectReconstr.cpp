@@ -16,6 +16,8 @@
 
 #include <objectReconstr.h>
 
+#include <opencv2/opencv.hpp>
+
 using namespace std;
 using namespace yarp::os;
 using namespace iCub::data3D;

@@ -17,13 +17,16 @@
 #include <reconstructionRoutine.h>
 
 using namespace std;
+using namespace cv;
 using namespace yarp::dev;
 using namespace yarp::sig;
 using namespace yarp::os;
 using namespace iCub::ctrl;
 
 /************************************************************************/
-ReconstructionRoutine::ReconstructionRoutine() : cloud(new pcl::PointCloud<pcl::PointXYZRGB>), cloudComplete(new pcl::PointCloud<pcl::PointXYZRGB>)
+ReconstructionRoutine::ReconstructionRoutine() :
+    cloud(new pcl::PointCloud<pcl::PointXYZRGB>),
+    cloudComplete(new pcl::PointCloud<pcl::PointXYZRGB>)
 {
     resetClouds();
 }
@@ -92,11 +95,13 @@ void ReconstructionRoutine::resetClouds()
 }
 
 /************************************************************************/
-bool ReconstructionRoutine::triangulateSinglePoint(IplImage* imgL, IplImage* imgR, yarp::sig::Vector &point2D, yarp::sig::Vector &point3D)
+bool ReconstructionRoutine::triangulateSinglePoint(IplImage* imgL, IplImage* imgR,
+                                                   yarp::sig::Vector &point2D,
+                                                   yarp::sig::Vector &point3D)
 {
     point3D.resize(3,0.0);
-    Mat leftIm(imgL);
-    Mat rightIm(imgR);
+    Mat leftIm=cvarrToMat(imgL);
+    Mat rightIm=cvarrToMat(imgR);
     disp->setImages(leftIm,rightIm);
     while(!disp->checkDone())
         yarp::os::Time::delay(0.1);
@@ -118,8 +123,8 @@ bool ReconstructionRoutine::triangulateSinglePoint(IplImage* imgL, IplImage* img
 /************************************************************************/
 bool ReconstructionRoutine::reconstruct(IplImage* imgL, IplImage* imgR, Bottle& pixelList)
 {
-    Mat leftIm(imgL);
-    Mat rightIm(imgR);
+    Mat leftIm=cvarrToMat(imgL);
+    Mat rightIm=cvarrToMat(imgR);
     disp->setImages(leftIm,rightIm);
     while(!disp->checkDone())
         yarp::os::Time::delay(0.1);
@@ -133,8 +138,8 @@ bool ReconstructionRoutine::reconstruct(IplImage* imgL, IplImage* imgR, Bottle& 
 /************************************************************************/
 bool ReconstructionRoutine::updateDisparity(IplImage* imgL, IplImage* imgR)
 {
-    Mat leftIm(imgL);
-    Mat rightIm(imgR);
+    Mat leftIm=cvarrToMat(imgL);
+    Mat rightIm=cvarrToMat(imgR);
     disp->setImages(leftIm,rightIm);
     while(!disp->checkDone())
         yarp::os::Time::delay(0.1);
