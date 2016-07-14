@@ -729,7 +729,7 @@ void PrecisionGrasp::sampleClouds(pcl::PointCloud<pcl::PointXYZ>::Ptr c, pcl::Po
             }
         }
     }
-    printf("points %d\n", c->size());
+    printf("points %d\n", (int)c->size());
 }
 
 /************************************************************************/
