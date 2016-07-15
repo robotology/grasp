@@ -1259,6 +1259,8 @@ bool PowerGrasp::respond(const Bottle& command, Bottle& reply)
         Bottle tmp;
         tmp.clear();
         tmp.addString("3Drec");
+        if (visualize)
+            tmp.addString("visualize");
 
         if (reconstructionPort.getOutputCount()>0)
             reconstructionPort.write(tmp,reply);
