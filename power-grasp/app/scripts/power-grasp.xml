@@ -27,6 +27,11 @@
     </module>
     
     <module>
+        <name>power-grasp</name>
+        <node>icub21</node>
+    </module>
+
+    <module>
         <name>yarpview</name>
         <node>icub22</node>
         <parameters>--name /segView --x 0 --y 0 --p 33 --out /segView/coordinates:out</parameters>
