@@ -17,13 +17,15 @@
 #ifndef __VISUALIZATION_THREAD_H__
 #define __VISUALIZATION_THREAD_H__
 
+#include <boost/thread/thread.hpp>
+
+#include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/features/normal_3d.h>
+
 #include <yarp/os/Thread.h>
 #include <yarp/sig/Vector.h>
 #include <yarp/sig/Matrix.h>
-#include <yarp/os/Semaphore.h>
-#include <boost/thread/thread.hpp>
-#include <pcl/visualization/pcl_visualizer.h>
-#include <pcl/features/normal_3d.h>
+
 #include <iCub/data3D/minBoundBox.h>
 #include <iCub/data3D/boundingBox.h>
 
@@ -42,21 +44,18 @@ class VisualizationThread : public yarp::os::Thread
 {
 private:
     DataToShow &data;
-    yarp::os::Semaphore mutex;
-    bool running;
     bool fromFile;
     int x;
     int y;
     int sizex;
     int sizey;
 
-public:
+    void run();
 
+public:
     VisualizationThread(DataToShow &_data);
     ~VisualizationThread() {};
 
-    void onStop();
-    void run(); 
     void setPosition(int x,int y);
     void setSize(int sizex, int sizey);
 };

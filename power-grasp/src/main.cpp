@@ -224,7 +224,8 @@ Windows, Linux
 
 #include <yarp/os/Network.h>
 #include <yarp/os/ResourceFinder.h>
-#include <powerGrasp.h>
+
+#include "powerGrasp.h"
 
 int main(int argc, char *argv[])
 {

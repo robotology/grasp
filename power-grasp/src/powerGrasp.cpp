@@ -15,9 +15,12 @@
 */
 
 #include <cmath>
+
 #include "powerGrasp.h"
 
 using namespace std;
+using namespace pcl;
+using namespace pcl::io;
 using namespace yarp::os;
 using namespace yarp::sig;
 using namespace yarp::math;
@@ -26,8 +29,7 @@ using namespace iCub::iKin;
 using namespace iCub::ctrl;
 using namespace iCub::learningmachine;
 using namespace iCub::data3D;
-using namespace pcl::io;
-using namespace pcl;
+
 
 /************************************************************************/
 PowerGrasp::PowerGrasp() : cloud(new pcl::PointCloud<pcl::PointXYZRGB>), 
@@ -446,9 +448,9 @@ void PowerGrasp::rankPoints()
     {
         rankIndices.clear();
         rankScores.clear();
-	    for (int i=0; i<cloudxyz->size(); i++)
-	    {
-	        int index=i;
+        for (int i=0; i<cloudxyz->size(); i++)
+        {
+            int index=i;
             int n_neighbohrs=kdtree.radiusSearch(cloudxyz->at(index),radiusSearch,pointIdxRadiusSearch,pointRadiusSquaredDistance);
             if (n_neighbohrs>minNeighbohrs)
             {
@@ -1697,9 +1699,9 @@ void PowerGrasp::computeDim()
     maxz=-1.0;
     double miny=1.0;
     double minz=1.0;
-	for (int i=0; i<cloudxyz->size(); i++)
-	{
-	    pcl::PointXYZ point=cloudxyz->at(i);
+    for (int i=0; i<cloudxyz->size(); i++)
+    {
+        pcl::PointXYZ point=cloudxyz->at(i);
             
         if (point.y>maxy)
             maxy=point.y;

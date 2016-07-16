@@ -18,15 +18,17 @@
 #define __ORIENTATION_THREAD_H__
 
 #include <cmath>
+
 #include <yarp/os/RateThread.h>
 #include <yarp/os/ResourceFinder.h>
 #include <yarp/os/Time.h>
-#include <yarp/sig/Vector.h>
-#include <yarp/sig/Matrix.h>
-#include <yarp/math/Math.h>
 #include <yarp/dev/CartesianControl.h>
 #include <yarp/dev/ControlBoardInterfaces.h>
 #include <yarp/dev/PolyDriver.h>
+#include <yarp/sig/Vector.h>
+#include <yarp/sig/Matrix.h>
+#include <yarp/math/Math.h>
+
 #include <iCub/iKin/iKinFwd.h>
 
 class OrientationThread : public yarp::os::RateThread

@@ -17,21 +17,26 @@
 #ifndef __POWER_GRASP_MODULE_H__
 #define __POWER_GRASP_MODULE_H__
 
-#include <fstream>
-#include <string>
 #include <cstdlib>
+#include <string>
 #include <vector>
+#include <fstream>
+
+#include <pcl/io/ply_io.h>
+#include <pcl/filters/statistical_outlier_removal.h>
+
 #include <yarp/os/RFModule.h>
 #include <yarp/os/BufferedPort.h>
 #include <yarp/os/Random.h>
+#include <yarp/os/Mutex.h>
 #include <yarp/os/Event.h>
-#include <pcl/io/ply_io.h>
-#include <pcl/filters/statistical_outlier_removal.h>
+
 #include <iCub/learningMachine/FixedRangeScaler.h>
 #include <iCub/learningMachine/LSSVMLearner.h>
 #include <iCub/data3D/SurfaceMeshWithBoundingBox.h>
-#include <visualizationThread.h>
-#include <orientationThread.h>
+
+#include "visualizationThread.h"
+#include "orientationThread.h"
 
 #ifdef _WIN32
     #include "custom/dirent.h"
@@ -121,8 +126,7 @@ private:
     yarp::os::BufferedPort<iCub::data3D::SurfaceMeshWithBoundingBox> meshPort;
     yarp::os::Port rpc;
 
-    yarp::os::Semaphore mutex;
-    yarp::os::Semaphore mutexBools;
+    yarp::os::Mutex mutex;
     yarp::os::Event eventRpc;
 
     std::vector<double> rankScores;
