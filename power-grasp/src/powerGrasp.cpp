@@ -67,9 +67,9 @@ PowerGrasp::PowerGrasp() : cloud(new pcl::PointCloud<pcl::PointXYZRGB>),
     data.boundingBox=&boundingBox;
     data.goodPointsIndexes=&rankIndices;
 
-    mutex.wait();
+    mutex.lock();
     currentState=STATE_WAIT;
-    mutex.post();
+    mutex.unlock();
     visualizationThread=new VisualizationThread(data);
 }
 
@@ -543,10 +543,10 @@ void PowerGrasp::startVisualization()
 /************************************************************************/
 bool PowerGrasp::updateModule()
 {
-    mutex.wait();
+    mutex.lock();
     if ((fromFile && !fromFileFinished) || (currentState==STATE_ESTIMATE))
     {
-        mutex.post();
+        mutex.unlock();
         double totTime=Time::now();
         if (fromFile)
         {
@@ -559,7 +559,7 @@ bool PowerGrasp::updateModule()
         }    
         else 
         {
-            mutex.wait();
+            mutex.lock();
             if (currentState==STATE_ESTIMATE)
             {
                 SurfaceMeshWithBoundingBox *receivedMesh=meshPort.read(false);
@@ -568,11 +568,11 @@ bool PowerGrasp::updateModule()
                     fromSurfaceMesh(*receivedMesh);
                 else
                 {
-                    mutex.post();
+                    mutex.unlock();
                     return true;
                 }
             }
-            mutex.post();
+            mutex.unlock();
         }
 
         if (writeCloud && outputDir!="")
@@ -609,9 +609,9 @@ bool PowerGrasp::updateModule()
 
         if (hand==NO_HAND || tmp.size()==0)
         {
-            mutex.wait();
+            mutex.lock();
             currentState=STATE_WAIT;
-            mutex.post();
+            mutex.unlock();
             eventRpc.signal();
             if (fromFile)
                 fromFileFinished=true;
@@ -639,15 +639,15 @@ bool PowerGrasp::updateModule()
             readyToGrasp=true;
             if (straight)
             {
-                mutex.wait();
+                mutex.lock();
                 currentState=STATE_GRASP;
-                mutex.post();
+                mutex.unlock();
             }
             else
             {
-                mutex.wait();
+                mutex.lock();
                 currentState=STATE_WAIT;
-                mutex.post();
+                mutex.unlock();
             }
         }
         else
@@ -657,20 +657,20 @@ bool PowerGrasp::updateModule()
         printf("Tot time %g\n", Time::now()-totTime);
         return true;
     }
-    mutex.post();
+    mutex.unlock();
 
-    mutex.wait();
+    mutex.lock();
     if (currentState==STATE_GRASP)
     {
-        mutex.post();
+        mutex.unlock();
         askToGrasp();        
-        mutex.wait();
+        mutex.lock();
         currentState=STATE_WAIT;
-        mutex.post();
+        mutex.unlock();
         eventRpc.signal();
         return true;
     }
-    mutex.post();
+    mutex.unlock();
 
     return true;
 }
@@ -1157,9 +1157,9 @@ bool PowerGrasp::respond(const Bottle& command, Bottle& reply)
     {
         if (readyToGrasp)
         {
-            mutex.wait();
+            mutex.lock();
             currentState=STATE_GRASP;
-            mutex.post();
+            mutex.unlock();
             eventRpc.reset();
             eventRpc.wait();
             reply.addString(ACK);
@@ -1205,22 +1205,22 @@ bool PowerGrasp::respond(const Bottle& command, Bottle& reply)
     else if (tag_0=="dont")
     {
         resetBools();
-        mutex.wait();
+        mutex.lock();
         currentState=STATE_WAIT;
-        mutex.post();
+        mutex.unlock();
         reply.addString(ACK);
         return true;
     }
     else if (tag_0=="grasp")
     {
-        mutex.wait();
+        mutex.lock();
         if (currentState==STATE_ESTIMATE || currentState==STATE_GRASP)
         {
-            mutex.post();
+            mutex.unlock();
             reply.addString(NACK);
             return true;
         }
-        mutex.post();
+        mutex.unlock();
 
         Bottle *pos=command.get(1).asList();
         chosenPixel[0]=pos->get(0).asInt();
@@ -1270,9 +1270,9 @@ bool PowerGrasp::respond(const Bottle& command, Bottle& reply)
         if (reply.size()>0 && reply.get(0).asString()==ACK)
         {
             reply.clear();
-            mutex.wait();
+            mutex.lock();
             currentState=STATE_ESTIMATE;
-            mutex.post();
+            mutex.unlock();
             straight=true;
             if (command.size()>2)
                 straight=(command.get(2).asString()!="wait");
