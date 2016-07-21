@@ -33,8 +33,8 @@ using namespace iCub::data3D;
 
 /************************************************************************/
 PowerGrasp::PowerGrasp() : cloud(new pcl::PointCloud<pcl::PointXYZRGB>), 
-    cloudxyz(new pcl::PointCloud<pcl::PointXYZ>),
-    normals (new pcl::PointCloud <pcl::Normal>)
+                           cloudxyz(new pcl::PointCloud<pcl::PointXYZ>),
+                           normals(new pcl::PointCloud <pcl::Normal>)
 {
     modality=MODALITY_AUTO;
     path="";
@@ -67,9 +67,7 @@ PowerGrasp::PowerGrasp() : cloud(new pcl::PointCloud<pcl::PointXYZRGB>),
     data.boundingBox=&boundingBox;
     data.goodPointsIndexes=&rankIndices;
 
-    mutex.lock();
     currentState=STATE_WAIT;
-    mutex.unlock();
     visualizationThread=new VisualizationThread(data);
 }
 
@@ -377,7 +375,7 @@ bool PowerGrasp::fillCloudFromFile()
 
     if (entry->d_name!=NULL)
     {
-        pcl::PointCloud<PointXYZRGB>::Ptr cloud_in_rgb (new pcl::PointCloud<PointXYZRGB>);
+        pcl::PointCloud<PointXYZRGB>::Ptr cloud_in_rgb(new pcl::PointCloud<PointXYZRGB>);
 
         string root=path+"/";
         string name=entry->d_name;
@@ -388,7 +386,7 @@ bool PowerGrasp::fillCloudFromFile()
 
         if (filterCloud)
         {
-            pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in_filtered (new pcl::PointCloud<pcl::PointXYZRGB>);
+            pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in_filtered(new pcl::PointCloud<pcl::PointXYZRGB>);
             filter(cloud_in_rgb,cloud_in_filtered);
             addPointCloud(cloud_in_filtered);
         }
@@ -420,7 +418,7 @@ int PowerGrasp::findIndexFromCloud(const yarp::sig::Vector &point)
 /************************************************************************/
 void PowerGrasp::normalEstimation()
 {
-    pcl::search::Search<pcl::PointXYZ>::Ptr tree = boost::shared_ptr<pcl::search::Search<pcl::PointXYZ> > (new pcl::search::KdTree<pcl::PointXYZ>);
+    pcl::search::Search<pcl::PointXYZ>::Ptr tree=boost::shared_ptr<pcl::search::Search<pcl::PointXYZ> >(new pcl::search::KdTree<pcl::PointXYZ>);
     pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimator;
     normal_estimator.setSearchMethod (tree);
     normal_estimator.setRadiusSearch (radiusSearch);
@@ -543,10 +541,10 @@ void PowerGrasp::startVisualization()
 /************************************************************************/
 bool PowerGrasp::updateModule()
 {
-    mutex.lock();
+    LockGuard lg(mutex);
+
     if ((fromFile && !fromFileFinished) || (currentState==STATE_ESTIMATE))
     {
-        mutex.unlock();
         double totTime=Time::now();
         if (fromFile)
         {
@@ -559,20 +557,13 @@ bool PowerGrasp::updateModule()
         }    
         else 
         {
-            mutex.lock();
             if (currentState==STATE_ESTIMATE)
             {
-                SurfaceMeshWithBoundingBox *receivedMesh=meshPort.read(false);
-
-                if (receivedMesh!=NULL)
+                if (SurfaceMeshWithBoundingBox *receivedMesh=meshPort.read())
                     fromSurfaceMesh(*receivedMesh);
                 else
-                {
-                    mutex.unlock();
                     return true;
-                }
             }
-            mutex.unlock();
         }
 
         if (writeCloud && outputDir!="")
@@ -609,9 +600,7 @@ bool PowerGrasp::updateModule()
 
         if (hand==NO_HAND || tmp.size()==0)
         {
-            mutex.lock();
             currentState=STATE_WAIT;
-            mutex.unlock();
             eventRpc.signal();
             if (fromFile)
                 fromFileFinished=true;
@@ -637,18 +626,7 @@ bool PowerGrasp::updateModule()
         if (!fromFile)
         {
             readyToGrasp=true;
-            if (straight)
-            {
-                mutex.lock();
-                currentState=STATE_GRASP;
-                mutex.unlock();
-            }
-            else
-            {
-                mutex.lock();
-                currentState=STATE_WAIT;
-                mutex.unlock();
-            }
+            currentState=straight?STATE_GRASP:STATE_WAIT;
         }
         else
             fromFileFinished=true;
@@ -657,20 +635,14 @@ bool PowerGrasp::updateModule()
         printf("Tot time %g\n", Time::now()-totTime);
         return true;
     }
-    mutex.unlock();
 
-    mutex.lock();
     if (currentState==STATE_GRASP)
     {
-        mutex.unlock();
         askToGrasp();        
-        mutex.lock();
         currentState=STATE_WAIT;
-        mutex.unlock();
         eventRpc.signal();
         return true;
     }
-    mutex.unlock();
 
     return true;
 }
@@ -969,166 +941,128 @@ bool PowerGrasp::get3DPoint(const yarp::sig::Vector &point2D, yarp::sig::Vector 
 /************************************************************************/
 bool PowerGrasp::respond(const Bottle& command, Bottle& reply) 
 {
+    LockGuard lg(mutex);
+
     string tag_0=command.get(0).asString().c_str();
     if (tag_0=="set")
     {
         if (command.size()<3)
-        {
             reply.addString("command not recognized");
-            return true;
-        }
-        string tag_1=command.get(1).asString().c_str();
-        if (tag_1=="visualization")
-        {
-            if (command.get(2).asString()=="on")
-                visualize=true;
-            else
-                visualize=false;
-            reply.addString(ACK);
-            return true;
-        }
-        else if (tag_1=="x")
-        {
-            if (command.size()>1)
-            {
-                posx=command.get(1).asInt();
-                visualizationThread->setPosition(posx,posy);
-                reply.addString(ACK);
-            }
-            else
-                reply.addString(NACK);
-            return true;
-        }
-        else if (tag_1=="y")
-        {
-            if (command.size()>1)
-            {
-                posy=command.get(1).asInt();
-                visualizationThread->setPosition(posx,posy);
-                reply.addString(ACK);
-            }
-            else
-                reply.addString(NACK);
-            return true;
-        }
-        else if (tag_1=="w")
-        {
-            if (command.size()>1)
-            {
-                sizex=command.get(1).asInt();
-                visualizationThread->setSize(sizex,sizey);
-                reply.addString(ACK);
-            }
-            else
-                reply.addString(NACK);
-            return true;
-        }
-        else if (tag_1=="h")
-        {
-            if (command.size()>1)
-            {
-                sizey=command.get(1).asInt();
-                visualizationThread->setSize(sizex,sizey);
-                reply.addString(ACK);
-            }
-            else
-                reply.addString(NACK);
-            return true;
-        }
-        else if (tag_1=="train")
-        {
-            if (command.get(2).asString()=="on")
-            {
-                train=true;
-                testWithLearning=false;
-            }
-            else
-                train=false;
-            reply.addString(ACK);
-            return true;
-        }
-        else if (tag_1=="testWithSVM")
-        {
-            if (command.get(2).asString()=="on")
-            {
-                if (testWithLearningEnabled)
-                {
-                    testWithLearning=true;
-                    train=false;
-                }
-                else
-                    printf("SVM machine not set\n");
-            }
-            else
-                testWithLearning=false;
-            reply.addString(ACK);
-            return true;
-        }
-        else if (tag_1=="offsetR")
-        {
-            if (command.size()<5)
-            {
-                reply.addString("nack, check offset size");
-                return true;
-            }
-            else
-            {
-                offsetR=pointFromBottle(command,2);
-                reply.addString(ACK);
-                return true;
-            }
-        }
-        else if (tag_1=="offsetL")
-        {
-            if (command.size()<5)
-            {
-                reply.addString("nack, check offset size");
-                return true;
-            }
-            else
-            {
-                offsetL=pointFromBottle(command,2);
-                reply.addString(ACK);
-                return true;
-            }
-        }
-        else if (tag_1=="modality")
-        {
-            if (command.get(2).asString()=="right")
-                modality=MODALITY_RIGHT;
-            else if (command.get(2).asString()=="left")
-                modality=MODALITY_LEFT;
-            else if (command.get(2).asString()=="center")
-                modality=MODALITY_CENTER;
-            else if (command.get(2).asString()=="top")
-                modality=MODALITY_TOP;
-            else
-                modality=MODALITY_AUTO;
-            reply.addString(ACK);
-            return true;
-        }
-        else if (tag_1=="filter")
-        {
-            if (command.get(2).asString()=="on")
-                filterCloud=true;
-            else
-                filterCloud=false;
-            reply.addString(ACK);
-            return true;
-        }
-        else if (tag_1=="write")
-        {
-            if (command.get(2).asString()=="on")
-                writeCloud=true;
-            else
-                writeCloud=false;
-            reply.addString(ACK);
-            return true;
-        }
         else
         {
-            reply.addString(NACK);
-            return true;
+            string tag_1=command.get(1).asString().c_str();
+            if (tag_1=="visualization")
+            {
+                visualize=(command.get(2).asString()=="on");
+                reply.addString(ACK);
+            }
+            else if (tag_1=="x")
+            {
+                if (command.size()>1)
+                {
+                    posx=command.get(1).asInt();
+                    visualizationThread->setPosition(posx,posy);
+                    reply.addString(ACK);
+                }            
+            }
+            else if (tag_1=="y")
+            {
+                if (command.size()>1)
+                {
+                    posy=command.get(1).asInt();
+                    visualizationThread->setPosition(posx,posy);
+                    reply.addString(ACK);
+                }
+            }
+            else if (tag_1=="w")
+            {
+                if (command.size()>1)
+                {
+                    sizex=command.get(1).asInt();
+                    visualizationThread->setSize(sizex,sizey);
+                    reply.addString(ACK);
+                }
+            }
+            else if (tag_1=="h")
+            {
+                if (command.size()>1)
+                {
+                    sizey=command.get(1).asInt();
+                    visualizationThread->setSize(sizex,sizey);
+                    reply.addString(ACK);
+                }
+            }
+            else if (tag_1=="train")
+            {
+                if (command.get(2).asString()=="on")
+                {
+                    train=true;
+                    testWithLearning=false;
+                }
+                else
+                    train=false;
+                reply.addString(ACK);
+            }
+            else if (tag_1=="testWithSVM")
+            {
+                if (command.get(2).asString()=="on")
+                {
+                    if (testWithLearningEnabled)
+                    {
+                        testWithLearning=true;
+                        train=false;
+                    }
+                    else
+                        printf("SVM machine not set\n");
+                }
+                else
+                    testWithLearning=false;
+                reply.addString(ACK);
+            }
+            else if (tag_1=="offsetR")
+            {
+                if (command.size()<5)
+                    reply.addString("nack, check offset size");
+                else
+                {
+                    offsetR=pointFromBottle(command,2);
+                    reply.addString(ACK);
+                }
+            }
+            else if (tag_1=="offsetL")
+            {
+                if (command.size()<5)
+                    reply.addString("nack, check offset size");
+                else
+                {
+                    offsetL=pointFromBottle(command,2);
+                    reply.addString(ACK);
+                }
+            }
+            else if (tag_1=="modality")
+            {
+                if (command.get(2).asString()=="right")
+                    modality=MODALITY_RIGHT;
+                else if (command.get(2).asString()=="left")
+                    modality=MODALITY_LEFT;
+                else if (command.get(2).asString()=="center")
+                    modality=MODALITY_CENTER;
+                else if (command.get(2).asString()=="top")
+                    modality=MODALITY_TOP;
+                else
+                    modality=MODALITY_AUTO;
+                reply.addString(ACK);
+            }
+            else if (tag_1=="filter")
+            {
+                filterCloud=(command.get(2).asString()=="on");
+                reply.addString(ACK);
+            }
+            else if (tag_1=="write")
+            {
+                writeCloud=(command.get(2).asString()=="on");
+                reply.addString(ACK);
+            }
         }
     }
     else if (tag_0=="help")
@@ -1151,22 +1085,16 @@ bool PowerGrasp::respond(const Bottle& command, Bottle& reply)
         reply.addString("go");
         reply.addString("dont");
         reply.addString("isGrasped");
-        return true;
     }
     else if (tag_0=="go")
     {
         if (readyToGrasp)
         {
-            mutex.lock();
             currentState=STATE_GRASP;
-            mutex.unlock();
             eventRpc.reset();
             eventRpc.wait();
             reply.addString(ACK);
         }
-        else
-            reply.addString(NACK);
-        return true;
     }
     else if (tag_0=="block")
     {
@@ -1178,9 +1106,6 @@ bool PowerGrasp::respond(const Bottle& command, Bottle& reply)
                 leftBlocked=true;
             reply.addString(ACK);
         }
-        else
-            reply.addString(NACK);
-        return true;
     }
     else if (tag_0=="unblock")
     {
@@ -1192,118 +1117,98 @@ bool PowerGrasp::respond(const Bottle& command, Bottle& reply)
                 leftBlocked=false;
             reply.addString(ACK);
         }
-        else
-            reply.addString(NACK);
-        return true;
     }
     else if (tag_0=="isGrasped")
-    {
-        string r=grasped?ACK:NACK;
-        reply.addString(r.c_str());
-        return true;
-    }
+        reply.addString(grasped?ACK:NACK);
     else if (tag_0=="dont")
     {
         resetBools();
-        mutex.lock();
         currentState=STATE_WAIT;
-        mutex.unlock();
         reply.addString(ACK);
-        return true;
     }
     else if (tag_0=="grasp")
     {
-        mutex.lock();
-        if (currentState==STATE_ESTIMATE || currentState==STATE_GRASP)
+        if ((currentState!=STATE_ESTIMATE) && (currentState!=STATE_GRASP))
         {
-            mutex.unlock();
-            reply.addString(NACK);
-            return true;
-        }
-        mutex.unlock();
-
-        Bottle *pos=command.get(1).asList();
-        chosenPixel[0]=pos->get(0).asInt();
-        chosenPixel[1]=pos->get(1).asInt();
-
-        Bottle cmd1;
-        reply.clear();
-        cmd1.addInt(chosenPixel[0]);
-        cmd1.addInt(chosenPixel[1]);
-
-        if (reconstructionPort.getOutputCount()>0)
-            reconstructionPort.write(cmd1,reply);
-
-        if (visualizationThread->isRunning())
-            visualizationThread->stop();
-
-        resetBools();
-
-        if (train && command.size()>1)
-            currentCurvature=(float)command.get(1).asDouble();
-
-        if (pos->size()>2)
-        {
-            if (pos->get(2).asString()=="point")
+            if (Bottle *pos=command.get(1).asList())
             {
-                if (get3DPoint(chosenPixel,chosenPoint))
-                    graspSpecificPoint=true;
-                else
+                if (pos->size()>=2)
                 {
-                    reply.clear();
-                    reply.addString(NACK);
-                    return true;
+                    chosenPixel[0]=pos->get(0).asInt(); 
+                    chosenPixel[1]=pos->get(1).asInt();
+
+                    Bottle cmd1,rep1;
+                    cmd1.addInt(chosenPixel[0]);
+                    cmd1.addInt(chosenPixel[1]);
+
+                    if (reconstructionPort.getOutputCount()>0)
+                        reconstructionPort.write(cmd1,rep1);
+
+                    if (visualizationThread->isRunning())
+                        visualizationThread->stop();
+
+                    resetBools();
+
+                    if (train && (command.size()>1))
+                        currentCurvature=(float)command.get(1).asDouble();
+
+                    if (pos->size()>2)
+                    {
+                        if (pos->get(2).asString()=="point")
+                        {
+                            if (get3DPoint(chosenPixel,chosenPoint))
+                                graspSpecificPoint=true;
+                            else
+                            {
+                                reply.addString(NACK);
+                                return true;
+                            }
+                        }
+                    }
+
+                    Bottle cmd2,rep2;
+                    cmd2.addString("3Drec");
+                    if (visualize)
+                        cmd2.addString("visualize");
+
+                    if (reconstructionPort.getOutputCount()>0)
+                        reconstructionPort.write(cmd2,rep2);
+
+                    if ((rep2.size()>0) && (rep2.get(0).asString()==ACK))
+                    {
+                        currentState=STATE_ESTIMATE;
+                        straight=true;
+                        if (command.size()>2)
+                            straight=(command.get(2).asString()!="wait");
+                        if (straight)
+                        {
+                            eventRpc.reset();
+                            eventRpc.wait();
+                        }
+
+                        if (noResult)
+                        {
+                            reply.addString(NACK);
+                            reply.addString("no_result");
+                            noResult=false;
+                        }
+                        else if (tooFar)
+                        {
+                            reply.addString(NACK);
+                            reply.addString("too_far");
+                            tooFar=false;
+                        }
+                        else
+                            reply.addString(ACK);
+                    }
                 }
             }
         }
-
-        reply.clear();
-        Bottle tmp;
-        tmp.clear();
-        tmp.addString("3Drec");
-        if (visualize)
-            tmp.addString("visualize");
-
-        if (reconstructionPort.getOutputCount()>0)
-            reconstructionPort.write(tmp,reply);
-
-        if (reply.size()>0 && reply.get(0).asString()==ACK)
-        {
-            reply.clear();
-            mutex.lock();
-            currentState=STATE_ESTIMATE;
-            mutex.unlock();
-            straight=true;
-            if (command.size()>2)
-                straight=(command.get(2).asString()!="wait");
-            if (straight)
-            {
-                eventRpc.reset();
-                eventRpc.wait();
-            }
-            if (noResult)
-            {
-                reply.addString(NACK);
-                reply.addString("no_result");
-                noResult=false;
-            }
-            else if (tooFar)
-            {
-                reply.addString(NACK);
-                reply.addString("too_far");
-                tooFar=false;
-            }
-            else
-            {
-                reply.addString(ACK);
-            }
-        }
-        else
-            reply.addString(NACK);
-      
-        return true;
     }
-    reply.addString(NACK);
+
+    if (reply.size()==0)
+        reply.addString(NACK); 
+
     return true;
 }
 
