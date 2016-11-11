@@ -25,11 +25,7 @@
 #include <pcl/io/ply_io.h>
 #include <pcl/filters/statistical_outlier_removal.h>
 
-#include <yarp/os/RFModule.h>
-#include <yarp/os/BufferedPort.h>
-#include <yarp/os/Random.h>
-#include <yarp/os/Mutex.h>
-#include <yarp/os/Event.h>
+#include <yarp/os/all.h>
 
 #include <iCub/learningMachine/FixedRangeScaler.h>
 #include <iCub/learningMachine/LSSVMLearner.h>
