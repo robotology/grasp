@@ -12,7 +12,7 @@ A C++ [YARP](https://github.com/robotology/yarp) set of libraries and modules th
 - [stereo-vision](https://github.com/robotology/stereo-vision)
 - [segmentation](https://github.com/robotology/segmentation)
 - [OpenCV](http://opencv.org/downloads.html)
-- [PCL: Point Cloud Library] (http://pointclouds.org/)
+- [Point Cloud Library](http://pointclouds.org)
 
 #### Notes on Point Cloud Library
 PCL also relies on a number of dependencies. Most of them can be installed with the classic `sudo apt-get install` command. You are going to need:
