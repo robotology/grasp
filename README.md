@@ -15,15 +15,12 @@ A C++ [YARP](https://github.com/robotology/yarp) set of libraries and modules th
 - [Point Cloud Library](http://pointclouds.org)
 
 #### Notes on Point Cloud Library
-PCL also relies on a number of dependencies. Most of them can be installed with the classic `sudo apt-get install` command. You are going to need:
+To install PCL do:
 
-- **boost** >= 1.4.6
-- **eigen** >= 3.0
-- **flann** >= 1.7.1
-- **vtk** >= 5.6
-- **qhull** 2009
-
-We recommend to install **boost** and **eigen** from `sudo-apt get install`, whereas **flann** and **vtk** can be installed easily either from sources or `sudo apt-get install`. The dependency **qhull** needs definitely to be installed from sources, as there is a problem between newer version of **qhull** and **pcl** >= 1.7.0, at least on Debian systems. For those who have Windows, it is usually enough to install the dependencies using binaries. Once you have all the dependencies, you can download the source code of **pcl** `1.7.0` (or **pcl** `1.7.1`), compile it and install it.
+```sh
+$ sudo apt install libpcl-dev
+$ sudo apt install libproj-dev
+```
 
 ## Documentation
 

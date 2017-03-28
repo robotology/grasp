@@ -24,6 +24,9 @@ set(header include/objectReconstr.h include/reconstructionRoutine.h include/visT
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
+# workaround
+list(REMOVE_ITEM PCL_LIBRARIES "vtkproj4")
+
 add_executable(${PROJECTNAME} ${source} ${header})
 target_link_libraries(${PROJECTNAME} ${YARP_LIBRARIES} stereoVision objects3D minimumBoundingBox ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
 install(TARGETS ${PROJECTNAME} DESTINATION bin)

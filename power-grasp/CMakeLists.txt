@@ -29,6 +29,9 @@ source_group("Header Files" FILES ${header})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS} -D_USE_MATH_DEFINES)
 
+# workaround
+list(REMOVE_ITEM PCL_LIBRARIES "vtkproj4")
+
 add_executable (${PROJECTNAME} ${source} ${header})
 target_link_libraries (${PROJECTNAME} ${PCL_LIBRARIES} ${YARP_LIBRARIES} minimumBoundingBox iKin ctrlLib learningMachine objects3D)
 install(TARGETS ${PROJECTNAME} DESTINATION bin)
