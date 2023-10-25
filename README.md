@@ -24,7 +24,7 @@ $ sudo apt install libproj-dev
 
 ## Documentation
 
-Online documentation is available here: [http://robotology.github.com/grasp](http://robotology.github.com/grasp).
+Online documentation is available here: http://robotology.github.io/grasp/.
 
 ## License
 
